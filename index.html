@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI in Cybersecurity | University of Bahrain</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #050a0f;
+    --surface: #0a1520;
+    --card: #0d1e2e;
+    --accent: #00d4ff;
+    --accent2: #00ff88;
+    --danger: #ff3366;
+    --text: #c8dde8;
+    --muted: #5a7a8a;
+    --border: rgba(0,212,255,0.15);
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 60px 40px 80px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%);
+  }
+
+  .uni-badge {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.8s ease;
+  }
+
+  header h1 {
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    animation: slideUp 0.8s ease 0.2s both;
+  }
+
+  header h1 span.hi {
+    color: var(--accent);
+    text-shadow: var(--glow);
+  }
+
+  header h1 span.sub {
+    display: block;
+    font-size: 0.45em;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    animation: fadeIn 0.8s ease 0.5s both;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .meta-value {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* SCAN LINE EFFECT */
+  .scanline {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: scan 3s linear infinite;
+    opacity: 0.5;
+    margin: 0;
+  }
+
+  @keyframes scan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5,10,15,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  nav a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 16px 20px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN CONTENT */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* SECTION */
+  section {
+    margin-bottom: 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .section-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    opacity: 0.6;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    border-color: rgba(0,212,255,0.4);
+    box-shadow: var(--glow);
+  }
+
+  .card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .card p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  /* ABSTRACT SPECIAL */
+  .abstract-card {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(0,255,136,0.03));
+    border-left: 3px solid var(--accent);
+    padding: 36px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .abstract-card p {
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  /* TEAM GRID */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s;
+  }
+
+  .team-card:hover {
+    border-color: var(--accent2);
+    box-shadow: 0 0 20px rgba(0,255,136,0.2);
+  }
+
+  .team-role {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .team-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .team-id {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* OBJECTIVES LIST */
+  .obj-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .obj-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+
+  .obj-item:hover {
+    border-color: rgba(0,212,255,0.4);
+    transform: translateX(4px);
+  }
+
+  .obj-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 28px;
+    padding-top: 2px;
+  }
+
+  .obj-text {
+    font-size: 0.93rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  /* QUESTIONS */
+  .q-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .q-item {
+    padding: 20px 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.93rem;
+    line-height: 1.7;
+    color: var(--text);
+    transition: all 0.3s;
+  }
+
+  .q-item:hover {
+    background: rgba(255,51,102,0.05);
+  }
+
+  /* TOC */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .toc-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .toc-ch {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    min-width: 32px;
+  }
+
+  /* STATUS BADGE */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  .status-badge.progress {
+    background: rgba(255,165,0,0.1);
+    border: 1px solid rgba(255,165,0,0.3);
+    color: orange;
+  }
+
+  .status-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: orange;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  footer span {
+    color: var(--accent);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    header, main, nav { padding-left: 20px; padding-right: 20px; }
+    .header-meta { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="uni-badge">University of Bahrain — College of Information Technology</div>
+  <h1>
+    <span class="hi">AI in Cybersecurity</span>
+    <span class="sub">Enhancing Threat Detection &amp; Response</span>
+  </h1>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Course</span>
+      <span class="meta-value">ITIS 499 — Senior Project</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Academic Year</span>
+      <span class="meta-value">2025–2026, Semester 2</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Supervisor</span>
+      <span class="meta-value">Dr. Ali Zolait</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Department</span>
+      <span class="meta-value">Information Systems</span>
+    </div>
+  </div>
+</header>
+
+<div class="scanline"></div>
+
+<nav>
+  <a href="#abstract">Abstract</a>
+  <a href="#team">Team</a>
+  <a href="#toc">Contents</a>
+  <a href="#background">Background</a>
+  <a href="#problem">Problem</a>
+  <a href="#questions">Questions</a>
+  <a href="#objectives">Objectives</a>
+  <a href="#methodology">Methodology</a>
+</nav>
+
+<main>
+
+  <!-- ABSTRACT -->
+  <section id="abstract">
+    <div class="section-header">
+      <span class="section-num">// 00</span>
+      <h2>Abstract</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="status-badge progress">
+      <div class="dot"></div>
+      Work in Progress
+    </div>
+    <div class="abstract-card card">
+      <p>
+        This project evaluates the effectiveness and integration of Artificial Intelligence (AI) within cybersecurity frameworks, specifically focusing on the educational and professional landscape in Bahrain. As cyber threats become increasingly sophisticated, this research investigates how AI-driven automation can enhance threat detection and incident response compared to traditional manual methods.
+      </p>
+      <br/>
+      <p>
+        Utilizing a quantitative survey of university students and IT professionals, the study measures levels of awareness, perceived technical reliability, and the impact of specialized skills on AI adoption. Preliminary results indicate a high level of awareness (49.6%) among IT students, though concerns regarding AI accuracy and human over-reliance remain. The findings provide a foundation for developing more robust, AI-enhanced security protocols while highlighting the critical need for continuous human-in-the-loop oversight to ensure organizational resilience.
+      </p>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <div class="section-header">
+      <span class="section-num">// 01</span>
+      <h2>Research Team</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <span class="team-role">Researcher</span>
+        <span class="team-name">Maryam Abdulla</span>
+        <span class="team-id">ID: 202100437</span>
+      </div>
+      <div class="team-card">
+        <span class="team-role">Researcher</span>
+        <span class="team-name">Emaan Rashid Latif</span>
+        <span class="team-id">ID: 202109038</span>
+      </div>
+      <div class="team-card">
+        <span class="team-role">Project Supervisor</span>
+        <span class="team-name">Dr. Ali Zolait</span>
+        <span class="team-id">University of Bahrain</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABLE OF CONTENTS -->
+  <section id="toc">
+    <div class="section-header">
+      <span class="section-num">// 02</span>
+      <h2>Table of Contents</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-item"><span class="toc-ch">CH.1</span> Introduction</div>
+      <div class="toc-item"><span class="toc-ch">CH.2</span> Literature Review</div>
+      <div class="toc-item"><span class="toc-ch">CH.3</span> Research Model &amp; Hypotheses</div>
+      <div class="toc-item"><span class="toc-ch">CH.4</span> Methodology</div>
+      <div class="toc-item"><span class="toc-ch">CH.5</span> Data Analysis &amp; Results</div>
+      <div class="toc-item"><span class="toc-ch">CH.6</span> Conclusion &amp; Future Work</div>
+    </div>
+  </section>
+
+  <!-- BACKGROUND -->
+  <section id="background">
+    <div class="section-header">
+      <span class="section-num">// 03</span>
+      <h2>Research Background</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="card">
+      <h3>Overview of Cybersecurity</h3>
+      <p>Artificial Intelligence (AI) has emerged as a transformative force in cybersecurity, offering advanced capabilities beyond traditional security tools. AI-powered systems can process massive amounts of data, identify abnormal patterns, and flag potential threats in real time — often faster and more accurately than human analysts.</p>
+      <br/>
+      <p>Through machine learning, deep learning, and behavioral analytics, AI can recognize new and evolving cyber threats, adapt to changing attack methods, and automate critical security responses. This reduces the likelihood of breaches, minimizes response time, and enhances overall resilience.</p>
+    </div>
+    <div class="card">
+      <h3>Evolution of Artificial Intelligence</h3>
+      <p>From simple rule-based systems, artificial intelligence has developed into sophisticated learning models capable of evaluating complicated data and making decisions autonomously. This evolution caused defense mechanisms in cybersecurity to shift from conventional signature-based detection to intelligent, behavior-based systems. Modern AI can recognize anomalies, identify previously unknown threats, and react to attacks instantly.</p>
+    </div>
+    <div class="card">
+      <h3>Role of AI in Cybersecurity</h3>
+      <p>AI plays a critical role in bolstering cybersecurity by enhancing the capacity to identify, evaluate, and react to threats more effectively than conventional techniques. AI facilitates automated incident response, minimizing human error and shortening the time needed to contain threats. By continuously learning from previous attacks and adjusting to new attack methods, AI improves cybersecurity defenses' accuracy, speed, and efficacy.</p>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="section-header">
+      <span class="section-num">// 04</span>
+      <h2>Research Problem</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="card">
+      <h3>Problem Statement</h3>
+      <p>Cybersecurity threats have become more sophisticated, faster, and harder to detect using traditional defense mechanisms. Conventional systems often rely on static rules, manual monitoring, and reactive responses — making them insufficient against modern attacks such as zero-day exploits, advanced persistent threats (APTs), and large-scale data breaches.</p>
+      <br/>
+      <p>While AI offers promising capabilities such as real-time threat detection, automated response, and predictive analysis, its integration into cybersecurity is not without challenges. Organizations face uncertainties regarding the accuracy, reliability, and ethical implications of AI-based systems, as well as concerns about over-reliance on automation.</p>
+    </div>
+  </section>
+
+  <!-- RESEARCH QUESTIONS -->
+  <section id="questions">
+    <div class="section-header">
+      <span class="section-num">// 05</span>
+      <h2>Research Questions</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="q-list">
+      <div class="q-item">What are the factors affecting effective adoption of AI as a threat detection and response tool in cybersecurity?</div>
+      <div class="q-item">How do these factors influence the capability of AI systems to detect, analyze, and respond to cyber threats?</div>
+      <div class="q-item">How do organizational knowledge, security team attitudes, perceived usefulness, and ease of use affect the intention to adopt AI-based cybersecurity solutions?</div>
+      <div class="q-item">How do organizational background, cybersecurity environments, security preferences, and exposure to cyber threats influence the intention to implement AI technologies for enhanced threat detection and response?</div>
+    </div>
+  </section>
+
+  <!-- OBJECTIVES -->
+  <section id="objectives">
+    <div class="section-header">
+      <span class="section-num">// 06</span>
+      <h2>Research Objectives</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="obj-list">
+      <div class="obj-item">
+        <span class="obj-num">01</span>
+        <span class="obj-text">Understand how modern AI and machine learning improve the speed and accuracy of detecting cyber threats compared to older methods.</span>
+      </div>
+      <div class="obj-item">
+        <span class="obj-num">02</span>
+        <span class="obj-text">Explore how AI can help respond to attacks in real time, including learning from new threats as they happen.</span>
+      </div>
+      <div class="obj-item">
+        <span class="obj-num">03</span>
+        <span class="obj-text">Study ways to make AI's decisions more transparent and understandable for security teams.</span>
+      </div>
+      <div class="obj-item">
+        <span class="obj-num">04</span>
+        <span class="obj-text">Identify challenges such as adversarial attacks that aim to fool AI systems and find ways to make AI-based security stronger and more reliable.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section id="methodology">
+    <div class="section-header">
+      <span class="section-num">// 07</span>
+      <h2>Research Methodology</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="card">
+      <h3>Mixed-Method Approach</h3>
+      <p>This research adopts a mixed-method approach combining both quantitative and qualitative methods. The quantitative approach involves collecting primary data through an online survey using Google Forms, distributed to gather responses about participants' awareness and perceptions of AI-based cybersecurity systems.</p>
+      <br/>
+      <p>The qualitative approach complements the survey by reviewing existing academic literature, models, and frameworks related to AI in cybersecurity — providing a deeper understanding of theoretical foundations and recent advancements.</p>
+    </div>
+    <div class="card">
+      <h3>Data Collection</h3>
+      <p><strong style="color:var(--accent)">Primary:</strong> Online questionnaire via Google Forms using a five-point Likert scale to measure participants' awareness and confidence in automated defense systems.</p>
+      <br/>
+      <p><strong style="color:var(--accent)">Secondary:</strong> Academic journals and conference papers (2018–2025) from IEEE Xplore, ScienceDirect, and SpringerLink — covering machine learning in intrusion detection, automated response systems, and explainable AI.</p>
+    </div>
+    <div class="card">
+      <h3>Ethical Considerations</h3>
+      <p>All data were collected ethically. Participation in the survey was voluntary and anonymous, and no personal or sensitive information was recorded. All secondary sources were properly cited following academic standards.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Department of Information Systems &nbsp;|&nbsp; College of Information Technology &nbsp;|&nbsp; <span>University of Bahrain</span></p>
+  <p style="margin-top:8px; opacity:0.5;">ITIS 499 — Senior Project — Academic Year 2025–2026</p>
+</footer>
+
+</body>
+</html>
