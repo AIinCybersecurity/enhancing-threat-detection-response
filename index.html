@@ -1,1497 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI in Cybersecurity — Maryam Abdulla & Emaan Rashid Latif</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --pink-50: #fdf0f5;
-    --pink-100: #f9cfe0;
-    --pink-200: #f4a3c2;
-    --pink-400: #e0628f;
-    --pink-600: #bf3d6a;
-    --pink-800: #8a1f46;
-    --pink-900: #5c0f2d;
-    --bg: #0d0b10;
-    --bg2: #140e18;
-    --bg3: #1c1224;
-    --surface: #1f1428;
-    --surface2: #271a33;
-    --border: rgba(224, 98, 143, 0.18);
-    --border2: rgba(224, 98, 143, 0.35);
-    --text: #f5eef9;
-    --text2: #c4aed4;
-    --text3: #9077a8;
-    --mono: 'Space Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-    --radius: 10px;
-    --radius-lg: 16px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.75;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Grid overlay aesthetic */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(224,98,143,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(224,98,143,0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ── HEADER ── */
-  header {
-    position: relative;
-    padding: 5rem 2rem 4rem;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    overflow: hidden;
-    z-index: 1;
-  }
-
-  header::after {
-    content: '';
-    position: absolute;
-    top: -80px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 300px;
-    background: radial-gradient(ellipse, rgba(224,98,143,0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .badge {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--pink-400);
-    border: 1px solid var(--border2);
-    background: rgba(224,98,143,0.08);
-    padding: 4px 14px;
-    border-radius: 100px;
-    margin-bottom: 1.5rem;
-  }
-
-  h1.report-title {
-    font-family: var(--mono);
-    font-size: clamp(1.6rem, 4vw, 2.8rem);
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.2;
-    max-width: 760px;
-    margin: 0 auto 1rem;
-  }
-
-  h1.report-title span { color: var(--pink-400); }
-
-  .subtitle {
-    font-size: 1rem;
-    color: var(--text2);
-    max-width: 580px;
-    margin: 0 auto 2.5rem;
-  }
-
-  .meta-grid {
-    display: inline-grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    max-width: 700px;
-    width: 100%;
-    text-align: left;
-  }
-
-  .meta-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-  }
-
-  .meta-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--pink-400);
-    margin-bottom: 4px;
-  }
-
-  .meta-value {
-    font-size: 13px;
-    color: var(--text2);
-    line-height: 1.4;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(13,11,16,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    overflow-x: auto;
-  }
-
-  nav ul {
-    display: flex;
-    list-style: none;
-    gap: 0;
-    width: max-content;
-  }
-
-  nav a {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text3);
-    text-decoration: none;
-    padding: 14px 16px;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-  }
-
-  nav a:hover { color: var(--pink-400); border-bottom-color: var(--pink-400); }
-
-  /* ── LAYOUT ── */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  section {
-    padding: 4rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  section:last-child { border-bottom: none; }
-
-  .section-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--pink-400);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-tag::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 1px;
-    background: var(--pink-400);
-  }
-
-  h2 {
-    font-family: var(--mono);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 1.5rem;
-    line-height: 1.3;
-  }
-
-  h3 {
-    font-family: var(--mono);
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--pink-200);
-    margin: 2rem 0 0.75rem;
-    letter-spacing: 0.02em;
-  }
-
-  h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text2);
-    margin: 1.5rem 0 0.5rem;
-    font-family: var(--mono);
-    letter-spacing: 0.04em;
-  }
-
-  p {
-    color: var(--text2);
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-  }
-
-  /* ── CALLOUT BOXES ── */
-  .callout {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--pink-400);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin: 1.5rem 0;
-  }
-
-  .callout p { margin: 0; font-size: 0.92rem; }
-  .callout strong { color: var(--pink-200); }
-
-  /* ── STAT CARDS ── */
-  .stat-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin: 1.5rem 0;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-family: var(--mono);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--pink-400);
-    display: block;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text3);
-    font-family: var(--mono);
-  }
-
-  /* ── HYPOTHESIS CARDS ── */
-  .hyp-grid {
-    display: grid;
-    gap: 12px;
-    margin: 1.5rem 0;
-  }
-
-  .hyp-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1rem 1.25rem;
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .hyp-badge {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--pink-400);
-    background: rgba(224,98,143,0.1);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 3px 10px;
-    white-space: nowrap;
-    min-width: 36px;
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  .hyp-card p { margin: 0; font-size: 0.9rem; }
-
-  .hyp-result {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    padding: 2px 8px;
-    border-radius: 100px;
-    margin-top: 4px;
-    display: inline-block;
-  }
-
-  .supported { background: rgba(52, 199, 89, 0.1); color: #4cd964; border: 1px solid rgba(52,199,89,0.3); }
-  .not-supported { background: rgba(224,98,143,0.1); color: var(--pink-400); border: 1px solid var(--border2); }
-
-  /* ── TABLE ── */
-  .tbl-wrap {
-    overflow-x: auto;
-    margin: 1.5rem 0;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-
-  thead { background: var(--surface); }
-
-  th {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--pink-400);
-    padding: 10px 14px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-
-  td {
-    padding: 9px 14px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text2);
-    vertical-align: top;
-  }
-
-  tr:last-child td { border-bottom: none; }
-
-  tbody tr:hover { background: var(--surface2); }
-
-  /* ── BAR CHARTS ── */
-  .bar-row {
-    margin: 0.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.88rem;
-  }
-
-  .bar-label {
-    min-width: 180px;
-    color: var(--text2);
-    font-size: 0.85rem;
-  }
-
-  .bar-track {
-    flex: 1;
-    height: 10px;
-    background: var(--surface2);
-    border-radius: 100px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--pink-600), var(--pink-400));
-    border-radius: 100px;
-  }
-
-  .bar-val {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--pink-400);
-    min-width: 42px;
-    text-align: right;
-  }
-
-  /* ── REFERENCES ── */
-  .ref-item {
-    font-size: 0.85rem;
-    color: var(--text3);
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    line-height: 1.6;
-  }
-
-  .ref-item:last-child { border-bottom: none; }
-
-  a.ref-link { color: var(--pink-400); text-decoration: none; }
-  a.ref-link:hover { text-decoration: underline; }
-
-  /* ── APPENDIX ── */
-  .qsection {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin: 1rem 0;
-  }
-
-  .qsection h4 { margin-top: 0; color: var(--pink-200); font-size: 0.9rem; }
-
-  .q-item {
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.88rem;
-    color: var(--text2);
-    display: flex;
-    gap: 10px;
-  }
-
-  .q-item:last-child { border-bottom: none; }
-
-  .q-id {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--pink-400);
-    min-width: 24px;
-  }
-
-  .scale-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 0.75rem 0;
-  }
-
-  .scale-pill {
-    font-size: 11px;
-    font-family: var(--mono);
-    padding: 3px 10px;
-    border-radius: 100px;
-    border: 1px solid var(--border2);
-    color: var(--text3);
-    background: var(--surface2);
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    padding: 3rem 2rem;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  footer p {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    color: var(--text3);
-    margin: 4px 0;
-  }
-
-  .keyword-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 1.5rem 0;
-  }
-
-  .kw {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--pink-400);
-    background: rgba(224,98,143,0.08);
-    border: 1px solid var(--border2);
-    padding: 4px 12px;
-    border-radius: 100px;
-  }
-
-  ul.report-list {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0;
-  }
-
-  ul.report-list li {
-    font-size: 0.9rem;
-    color: var(--text2);
-    padding: 5px 0 5px 20px;
-    position: relative;
-  }
-
-  ul.report-list li::before {
-    content: '›';
-    position: absolute;
-    left: 0;
-    color: var(--pink-400);
-    font-family: var(--mono);
-  }
-
-  @media (max-width: 600px) {
-    h1.report-title { font-size: 1.5rem; }
-    .bar-label { min-width: 120px; font-size: 0.78rem; }
-    .meta-grid { grid-template-columns: 1fr 1fr; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI in Cybersecurity | Senior Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff007f;
+            --dark-pink: #4d0026;
+            --cyber-black: #0d0208;
+            --text-glow: 0 0 10px rgba(255, 0, 127, 0.8);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--cyber-black);
+            color: #ffb3d9;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Cyber Background Effect */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: rgba(13, 2, 8, 0.85);
+            border-left: 2px solid var(--neon-pink);
+            border-right: 2px solid var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.2);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--neon-pink);
+            padding-bottom: 40px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-pink);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 2.5rem;
+            text-shadow: var(--text-glow);
+            margin-bottom: 20px;
+        }
+
+        .metadata {
+            font-size: 0.9rem;
+            color: #ff80bf;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-pink);
+            border-bottom: 1px solid var(--dark-pink);
+            margin: 40px 0 20px 0;
+            padding-bottom: 5px;
+            text-shadow: var(--text-glow);
+        }
+
+        h3 { color: #ff66b2; margin: 25px 0 10px 0; }
+
+        p { margin-bottom: 20px; text-align: justify; }
+
+        .abstract-box {
+            background: rgba(255, 0, 127, 0.05);
+            padding: 25px;
+            border: 1px dashed var(--neon-pink);
+            margin: 30px 0;
+            font-style: italic;
+        }
+
+        ul { margin-bottom: 20px; list-style-type: " > "; padding-left: 20px; color: #ff99cc; }
+        li { margin-bottom: 10px; }
+
+        .references { font-size: 0.85rem; color: #cc6699; }
+
+        /* Navigation Dot */
+        .nav-link {
+            color: var(--neon-pink);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .nav-link:hover { text-shadow: 0 0 15px var(--neon-pink); }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.8rem;
+            border-top: 1px solid var(--dark-pink);
+            color: var(--dark-pink);
+        }
+    </style>
 </head>
 <body>
 
-<!-- ══════════════════════════ HEADER ══════════════════════════ -->
-<header>
-  <div class="badge">Senior Research Project · ITIS 499 · AY 2025–2026</div>
-  <h1 class="report-title">AI in Cybersecurity:<br><span>Enhancing Threat Detection<br>and Response</span></h1>
-  <p class="subtitle">Investigating the role of artificial intelligence in detecting and preventing cyber threats, with a focus on the Bahrain context.</p>
-  <div class="meta-grid">
-    <div class="meta-card">
-      <div class="meta-label">Authors</div>
-      <div class="meta-value">👩‍💻Maryam Abdulla - 202100437<br>👩‍💻Emaan Rashid Latif - 202109038</div>
-    </div>
-    <div class="meta-card">
-      <div class="meta-label">Supervisor</div>
-      <div class="meta-value">🎓Dr. Ali Zolait</div>
-    </div>
-    <div class="meta-card">
-      <div class="meta-label">Institution</div>
-      <div class="meta-value">University of Bahrain<br>College of Information Technology</div>
-    </div>
-    <div class="meta-card">
-      <div class="meta-label">Submission</div>
-      <div class="meta-value">May 12th, 2026<br>Dept. of Information Systems</div>
-    </div>
-  </div>
-</header>
-
-<!-- ══════════════════════════ NAV ══════════════════════════ -->
-<nav>
-  <ul>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#ch1">Ch 1 · Intro</a></li>
-    <li><a href="#ch2">Ch 2 · Lit Review</a></li>
-    <li><a href="#ch3">Ch 3 · Model</a></li>
-    <li><a href="#ch4">Ch 4 · Method</a></li>
-    <li><a href="#ch5">Ch 5 · Results</a></li>
-    <li><a href="#ch6">Ch 6 · Conclusion</a></li>
-    <li><a href="#references">References</a></li>
-    <li><a href="#appendix">Appendix</a></li>
-  </ul>
-</nav>
+<canvas id="canvas"></canvas>
 
 <div class="container">
+    <header>
+        <p>University of Bahrain [cite: 389]</p>
+        <p>College of Information Technology | Department of Information Systems [cite: 390, 391]</p>
+        <h1>AI in Cybersecurity:</h1>
+        <h3>Enhancing Threat Detection and Response</h3>
+        <div class="metadata">
+            <p>Prepared by: Maryam Abdulla (202100437) & Emaan Rashid Latif (202109038) [cite: 394, 395]</p>
+            <p>Senior Project | Supervisor: Dr. Ali Zolait [cite: 397, 399]</p>
+            <p>Academic Year 2025-2026 | Submission Date: May 12, 2026 [cite: 398, 401]</p>
+        </div>
+    </header>
+
+    <section id="abstract">
+        <h2>Abstract</h2>
+        <div class="abstract-box">
+            <p>This research project examines the application of artificial intelligence (AI) in detecting and preventing cyber threats, focusing specifically on the context of Bahrain[cite: 403]. As Buczak and Guven (2016) point out, modern cyberattacks are growing highly complex, making it virtually impossible to rely on manual human effort alone for threat detection and mitigation[cite: 404]. To explore this, we used a mixed-methods approach, combining a thorough review of existing academic literature with empirical data from a survey of 250 IT students and professionals in Bahrain[cite: 406]. Our survey data shows that respondents hold a generally positive attitude toward the integration of AI in security operations, with an overall attitude mean score of 3.64 out of 5.00[cite: 408].</p>
+        </div>
+        <p><strong>Keywords:</strong> Bahrain, UOB, AI, Cybersecurity, Threat Detection, Mixed-Methods Research[cite: 412].</p>
+    </section>
+
+    <section id="chapter1">
+        <h2>Chapter 1: Introduction</h2>
+        <h3>1.1 Research Background</h3>
+        <p>In this section, the basics of Artificial Intelligence (AI) in cybersecurity are introduced, focusing on facilitating real-life applications of AI's impact on digital threat detection and response[cite: 572, 573].</p>
+        
+        <h3>1.1.1 Overview of Cybersecurity</h3>
+        <p>Cybersecurity is described by NIST (2023) as the process of protecting computers, systems, networks, and data from attacks or any damage, ensuring uninterrupted functioning and safety[cite: 577]. The primary objective is to maintain the CIA triad: confidentiality, integrity, and availability[cite: 579].</p>
+
+        <h3>1.1.2 Evolution of Artificial Intelligence</h3>
+        <p>Early AI systems were predominantly rule-based, but the introduction of machine learning changed everything by enabling systems to learn from data rather than just following instructions[cite: 588, 591].</p>
+
+        <h3>1.2 Research Problem</h3>
+        <p>Cybersecurity threats have become more sophisticated and harder to detect using traditional mechanisms which rely on static rules and manual monitoring[cite: 613, 614]. This research seeks to identify factors influencing the successful implementation of AI in these systems[cite: 618].</p>
+
+        <h3>1.4 Research Objectives</h3>
+        <ul>
+            <li>To understand how AI improves the speed and accuracy of detecting threats[cite: 627].</li>
+            <li>To explore real-time attack response and learning capabilities[cite: 628].</li>
+            <li>To study ways to make AI decisions more transparent for security teams[cite: 629].</li>
+            <li>To identify challenges like adversarial AI and strengthen dependability[cite: 630].</li>
+        </ul>
+    </section>
+
+    <section id="chapter2">
+        <h2>Chapter 2: Literature Review</h2>
+        <p>AI is used for several specific jobs in cybersecurity, most notably threat detection and incident response[cite: 597, 600]. AI-based IDS systems process vast amounts of network traffic faster than humans[cite: 635]. However, gaps exist regarding the practical problems of deployment and the lack of explainability and trust in automated systems[cite: 645, 647].</p>
+    </section>
+
+    <section id="chapter3">
+        <h2>Chapter 3: Research Model and Hypotheses</h2>
+        <p>The research model examines Independent Variables such as AI-based detection and response capabilities, and Moderating Variables like perceived usefulness and ease of use[cite: 463, 465].</p>
+        <ul>
+            <li><strong>H1:</strong> AI-based Threat Detection Capabilities[cite: 467].</li>
+            <li><strong>H5:</strong> Perceived usefulness of AI[cite: 520].</li>
+            <li><strong>H6:</strong> Perceived ease of use[cite: 521].</li>
+        </ul>
+    </section>
+
+    <section id="chapter4">
+        <h2>Chapter 4: Methodology</h2>
+        <p>This study used a quantitative strategy applied through surveys to measure the level of awareness and attitudes regarding AI and cybersecurity[cite: 99, 100].</p>
+        <h3>4.4.3 Sample Size</h3>
+        <p>A total of 250 valid responses were received from university students and IT practitioners in Bahrain[cite: 142, 160]. Data collection occurred from November 1st, 2025 to May 1st, 2026 via Google Forms[cite: 173, 174].</p>
+    </section>
+
+    <section id="chapter5">
+        <h2>Chapter 5: Data Analysis and Results</h2>
+        <p>The total mean for AI awareness was 3.50[cite: 292]. The results indicate that while technical capabilities are strong, the effectiveness of AI depends critically on how useful and easy to work with professionals perceive the tools to be[cite: 349]. Regression analysis showed H5 (Perceived Usefulness) and H6 (Ease of Use) were statistically supported.</p>
+    </section>
+
+    <section id="chapter6">
+        <h2>Chapter 6: Conclusion</h2>
+        <p>The research confirms that AI's role in improving cybersecurity in Bahrain is viewed positively[cite: 351]. Organizations should invest not just in the technology, but in ensuring end-users find it easy to integrate into existing workflows[cite: 350].</p>
+    </section>
+
+    <section class="references">
+        <h2>References</h2>
+        <p>Buczak, A. L., & Guven, E. (2016). A Survey of Data Mining and Machine Learning Methods for Cyber Security Intrusion Detection. [cite: 404, 583]</p>
+        <p>NIST (2023). Cybersecurity Framework. [cite: 577, 579]</p>
+        <p>Creswell, J.W. and Creswell, J.D. (2018). Research design: Qualitative, quantitative, and Mixed Methods Approaches. [cite: 361]</p>
+    </section>
+
+    <footer>
+        &copy; 2026 Maryam Abdulla & Emaan Rashid Latif. Built for ITIS 499 Senior Project. [cite: 394, 395, 396]
+    </footer>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const nums = '0123456789';
+    const alphabet = katakana + latin + nums;
+
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
 
-<!-- ══════════════════════════ ABSTRACT ══════════════════════════ -->
-<section id="abstract">
-  <div class="section-tag">Abstract</div>
-  <h2>Research Overview</h2>
-  <p>This research project investigates the use of artificial intelligence (AI) in detecting and preventing cyber threats, with a particular focus on the Bahrain context. Cyberattacks are becoming increasingly complex, and manual methods simply are not keeping up — making it crucial to begin using smarter, automated tools.</p>
-  <p>Two approaches were used: reviewing a substantial body of existing research and conducting a survey with 250 people, primarily IT students and professionals. The goal was to assess whether people are aware of these AI tools, whether they believe they are dependable, and what prompts a company to use these tools.</p>
-  <p>Results suggest that most respondents have a moderately positive attitude toward AI in cybersecurity. The average attitude score was 3.64 out of 5. Approximately 60% reported that AI is significantly present in cybersecurity today. Concerns remain around AI accuracy and over-reliance. Findings demonstrate that while AI can be highly effective in driving productivity, it is most effective when used as an adjunct to human expertise rather than in isolation.</p>
+    const rainDrops = [];
 
-  <div class="stat-row">
-    <div class="stat-card">
-      <span class="stat-number">250</span>
-      <span class="stat-label">Survey respondents</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">3.64</span>
-      <span class="stat-label">Mean attitude score (/5)</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">91.8%</span>
-      <span class="stat-label">Model R² fit</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-number">1/6</span>
-      <span class="stat-label">Hypotheses supported</span>
-    </div>
-  </div>
+    for (let x = 0; x < columns; x++) {
+        rainDrops[x] = 1;
+    }
 
-  <div class="keyword-pills">
-    <span class="kw">Bahrain</span>
-    <span class="kw">UOB</span>
-    <span class="kw">AI</span>
-    <span class="kw">Cybersecurity</span>
-    <span class="kw">Threat Detection</span>
-    <span class="kw">Mixed-Methods Research</span>
-  </div>
+    const draw = () => {
+        ctx.fillStyle = 'rgba(13, 2, 8, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  <div class="callout">
-    <p><strong>Acknowledgment:</strong> Sincere thanks to Dr. Ali Zolait for his continuous guidance throughout every stage of this work. We also thank our families and friends for their endless support, and all 250 respondents who participated in our survey.</p>
-  </div>
-</section>
+        ctx.fillStyle = '#ff007f'; // Pink rain
+        ctx.font = fontSize + 'px monospace';
 
-<!-- ══════════════════════════ CHAPTER 1 ══════════════════════════ -->
-<section id="ch1">
-  <div class="section-tag">Chapter 1</div>
-  <h2>Introduction</h2>
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
 
-  <h3>1.1 Research Background</h3>
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                rainDrops[i] = 0;
+            }
+            rainDrops[i]++;
+        }
+    };
 
-  <h4>1.1.1 Overview of Cybersecurity</h4>
-  <p>Cybersecurity is described by NIST (2023) as the process of protecting computers, systems, networks, and data from attacks or any damage, thereby ensuring uninterrupted functioning and safety. With the majority of organizations — including financial institutions, healthcare facilities, educational institutions, and governmental bodies — utilizing computers for various purposes, cybersecurity has become one of the most important tasks within IT.</p>
-  <p>The primary objective of cybersecurity is to keep the CIA triad: <strong>Confidentiality</strong> (data being kept private), <strong>Integrity</strong> (data not being altered without authorization), and <strong>Availability</strong> (systems and data that are accessible when required). If not addressed, any of these three elements can cause major challenges for an organization.</p>
-  <p>Cyber threats have evolved and become harder to manage. Phishing attacks, malware, ransomware, and large-scale data breaches are becoming more widespread and damaging. The typical security technologies that depend on known attack signatures and fixed rules are no longer sufficient against these new types of threats. This drives the search for how to use AI in improving cybersecurity.</p>
-
-  <h4>1.1.2 Evolution of Artificial Intelligence</h4>
-  <p>Early AI systems were mostly rule-based, meaning they had to be programmed with all the logic they required to execute. Simple and structured problems worked exactly as planned, but they failed when there was anything new or unexpected. The introduction of machine learning changed this — enabling systems to learn on their own, steadily and through data, rather than following a set of instructions.</p>
-  <p>Deep learning followed, utilizing neural networks that process highly complex data such as images, speech, or large amounts of network traffic. Thanks to these developments, AI is far more adaptable and effective in handling rapidly evolving environments — a critical need in cybersecurity. Newer systems can detect unusual patterns even if not previously exposed to such an attack.</p>
-
-  <h4>1.1.3 Role of AI in Cybersecurity</h4>
-  <p>AI is used for several specific jobs in cybersecurity today. The most apparent is threat detection — AI systems can more quickly and effectively process large amounts of data and identify anything that looks suspicious. This is something that a human analyst wouldn't be able to do in a large organization with thousands of events occurring per second.</p>
-  <p>AI is also involved in incident response: once a threat is verified, AI can help determine how dangerous it is, and in some instances even automatically respond by isolating the compromised device or blocking suspicious traffic. Additionally, AI helps security teams cut down on false alarms — a long-standing issue where too many alerts are generated, most of which are false.</p>
-
-  <h3>1.2 Research Problem</h3>
-  <div class="callout">
-    <p><strong>Problem Statement:</strong> Cybersecurity threats have become more sophisticated, faster, and harder to detect using traditional defence mechanisms. Conventional security systems often rely on static rules, manual monitoring, and reactive responses, making them insufficient against modern attacks such as zero-day exploits, advanced persistent threats (APTs), and large-scale data breaches. While AI offers promising capabilities, such as real-time threat detection, automated response, and predictive analysis, its integration into cybersecurity is not without challenges. Organizations face uncertainties regarding the accuracy, reliability, and ethical implications of AI-based systems, as well as concerns about over-reliance on automation.</p>
-  </div>
-  <p>This research seeks to:</p>
-  <ul class="report-list">
-    <li>Identify the factors that influence the successful implementation of AI in threat detection and response systems.</li>
-    <li>Assess the impact of these factors on the overall performance, reliability, and decision-making quality of AI-driven cybersecurity solutions.</li>
-  </ul>
-
-  <h3>1.3 Research Questions</h3>
-  <ul class="report-list">
-    <li>What are the factors affecting the effective adoption of AI as a threat detection and response tool in cybersecurity?</li>
-    <li>How do these factors influence the capability of AI systems to detect, analyse, and respond to cyber threats?</li>
-    <li>How do organizational knowledge, security team attitudes, perceived usefulness, and perceived ease of use affect the intention to adopt AI-based cybersecurity solutions?</li>
-    <li>How does organizational background, the nature of cybersecurity environments, security preferences, and exposure to cyber threats influence the intention to implement AI technologies for enhanced threat detection and response?</li>
-  </ul>
-
-  <h3>1.4 Research Objectives</h3>
-  <ul class="report-list">
-    <li>To understand how modern AI and machine learning improve the speed and accuracy of detecting cyber threats compared to older methods.</li>
-    <li>To explore how AI can help respond to attacks in real time, including learning from new threats as they happen.</li>
-    <li>To study ways to make AI's decisions more transparent and understandable for security teams.</li>
-    <li>To identify challenges like adversarial attacks on AI systems and find ways to make AI-based security stronger and more dependable.</li>
-  </ul>
-
-  <h3>1.5 Research Significance</h3>
-  <p>This research is significant because cyberattacks have increased in frequency and severity. Existing systems rely on fixed signatures or rules for threat detection, which does not work well against new types of attacks. AI — particularly machine learning and deep learning — provides a new approach that can learn over time and detect things that newer attacks may fail to detect through traditional methods.</p>
-  <p>AI-based IDS systems have been shown to process vast amounts of network traffic and system logs faster than human counterparts, detect suspicious activity faster, and identify both known and unknown attack types by learning normal network behaviors. AI also helps speed up incident response through automated response systems that can quickly contain threats by isolating affected systems or blocking malicious traffic before severe damage is done.</p>
-  <p>This research adds to the body of knowledge by examining both the technical and human aspects of AI's implementation in cybersecurity. On a practical level, the results can assist Bahrain and other organizations in the Gulf region in making better choices about how to utilize AI within their security systems without sacrificing needed human oversight.</p>
-
-  <h3>1.6 Gaps Analysis</h3>
-  <p>While there is already significant research around the use of AI in cybersecurity, several gaps remain underrepresented:</p>
-  <ul class="report-list">
-    <li>Much current research focuses on enhancing detection accuracy using ML/DL methods but fails to consider the practical problems of deployment within an organization's environment.</li>
-    <li>There is a lack of explainability and trust — while explainability is a key requirement for AI systems in cybersecurity, much of the existing literature remains highly abstract and not directly applicable to practical solutions.</li>
-    <li>Most studies view threat detection and incident response as two distinct entities, with little research examining AI in an integrated workflow covering detection, response, and continuous learning.</li>
-    <li>There is not enough research that focuses on human and organizational issues — the willingness of security teams to embrace AI, the level of training required, and whether they trust the tools they have been handed.</li>
-  </ul>
-
-  <h3>1.7 Theoretical Framework</h3>
-
-  <h4>1.7.1 AI-Driven Threat Detection Models</h4>
-  <p>Traditional security tools rely on rules or known signatures and are poorly able to defend against attacks they have never seen. AI systems use machine learning and deep learning algorithms that can identify abnormal or harmful activity even when that activity does not match any previously known pattern.</p>
-  <p>Supervised learning algorithms such as Support Vector Machines or Random Forest have been used to classify network traffic as normal or malicious. Deep learning abilities — including Deep Neural Networks and Long Short-Term Memory (LSTM) — can establish significantly more intricate patterns concealed in massive datasets. AI models can identify not only known threats, but new and unknown ones as well, including zero-day attacks.</p>
-  <p>Anomaly detection is another key component: AI can establish a profile of how a network should operate and then look for abnormal activities. This is typically done using unsupervised learning methods such as clustering and auto-encoders, which do not require labeled attacks to function.</p>
-  <p>AI-powered detection can also aggregate information from various sources — log files, user activity, intrusion detection systems, and endpoint devices — providing a more comprehensive understanding of system events (data fusion) for earlier identification.</p>
-
-  <h4>1.7.2 Incident Response Frameworks</h4>
-  <p>Incident response encompasses the formal handling process, involving: Preparation, Detection, Containment, Eradication, Recovery, and Post-Incident Review. With AI, all of these stages can be quicker and more accurate.</p>
-  <p>Based on the NIST Incident Response Life Cycle, AI can automate early stages of detection and prioritize warnings, helping confirm incidents faster. Upon confirmation of a threat, AI systems can take automatic action — isolating infected devices, blocking malicious accounts, and limiting suspicious traffic.</p>
-  <p>Organizations are now incorporating SOAR (Security Orchestration, Automation, and Response) into their incident response strategies. When integrated with AI, SOAR tools can correlate security alerts from different sources, provide context, and suggest or carry out remediation measures — minimizing critical KPIs such as MTTD (Mean Time to Detect) and MTTR (Mean Time to Respond).</p>
-  <p>A continuous learning loop is one of the more interesting ideas: once an incident has been resolved, data from the event can be used to refine the AI system to detect and respond better to similar incidents in the future.</p>
-
-  <h3>1.8 Research Methodology</h3>
-  <p>A mixed approach was used — a combination of quantitative and qualitative methods. The quantitative side was supported with data collection through an online survey using Google Forms, targeted at university students and IT sector workers in Bahrain, using a 5-point Likert scale.</p>
-  <p>The qualitative component involved analysis of the academic literature, models, and frameworks about AI in cybersecurity, providing theoretical basis and context for the survey results.</p>
-
-  <h4>1.8.1 Data Collection</h4>
-  <p><strong>Primary data:</strong> Google Forms online questionnaire distributed via digital means. Closed-ended questions gauging participants' knowledge of AI use in cybersecurity and trust in automated defenses, rated on a five-point Likert-type scale.</p>
-  <p><strong>Secondary data:</strong> Academic journals and conference papers published from 2016 to 2025, sourced from IEEE Xplore, ScienceDirect, and SpringerLink. Key areas examined included Machine Learning-based Intrusion Detection, Automated Response Systems, and Explainable AI in Cybersecurity.</p>
-
-  <h4>1.8.2 Data Analysis</h4>
-  <p>Survey answers were transformed into facts. Background questions were compiled into percentages. Likert-scale questions were analyzed by finding average scores to show whether the group mostly agreed or disagreed. Charts were created to make patterns visible. Common themes were identified from the literature and compared to questionnaire responses.</p>
-
-  <h4>1.8.3 Ethical Considerations</h4>
-  <p>All data were collected ethically. Participation in the survey was voluntary and anonymous, and no personal or sensitive information was recorded. All secondary sources were properly cited following academic standards.</p>
-
-  <h3>1.9 Research Structure</h3>
-  <p>This research consists of six chapters:</p>
-  <ul class="report-list">
-    <li><strong>Chapter 1 (Introduction):</strong> Research background, problem statement, research questions, objectives, significance, gap analysis, theoretical framework, and research methodology.</li>
-    <li><strong>Chapter 2 (Literature Review):</strong> Key concepts of cybersecurity, artificial intelligence, and the integration of AI within cybersecurity systems.</li>
-    <li><strong>Chapter 3 (Research Model and Hypotheses):</strong> The conceptual framework and the six hypotheses evaluated in this research.</li>
-    <li><strong>Chapter 4 (Methodology):</strong> Research strategy, methods, sample selection, data collection, and analysis.</li>
-    <li><strong>Chapter 5 (Data Analysis and Results):</strong> Demographic analysis, data validity, reliability analysis, hypothesis testing, and survey findings across all constructs.</li>
-    <li><strong>Chapter 6 (Conclusion and Future Work):</strong> Main findings, implications, and directions for future research.</li>
-  </ul>
-</section>
-
-<!-- ══════════════════════════ CHAPTER 2 ══════════════════════════ -->
-<section id="ch2">
-  <div class="section-tag">Chapter 2</div>
-  <h2>Literature Review</h2>
-
-  <h3>2.1 Cybersecurity</h3>
-
-  <h4>2.1.1 Definition of Cybersecurity</h4>
-  <p>As defined by NIST (2023), cybersecurity refers to the processes adopted to safeguard computers, computer networks, and any information stored within such devices against any unauthorized access, destruction, or disruption. Among the core concepts in this area include confidentiality (keeping data confidential), integrity (protecting data from unauthorized modification), and availability (ensuring accessibility of the data).</p>
-  <p>Cybersecurity goes beyond technology — it includes both policy and behavior within organizations. Even with the most advanced protection software, optimal security cannot be achieved without proper policy and employee conduct.</p>
-
-  <h4>2.1.2 Importance of Cybersecurity</h4>
-  <p>The significance of cybersecurity has increased tremendously because most organizations now depend on technology to store critical information and conduct their businesses. A cyberattack can lead to devastating effects including financial losses, operational disruption, and legal ramifications. Health organizations, financial institutions, educational organizations, and government agencies are at the highest risk because of the value of their information.</p>
-  <p>A poor security system creates great risks of being attacked or hacked, which leads to a loss of customer and partner confidence. Given that cyber-attacks are becoming increasingly common and hard to prevent, ignoring cybersecurity issues is no longer an option for enterprises.</p>
-
-  <h4>2.1.3 Common Cybersecurity Threats</h4>
-  <ul class="report-list">
-    <li><strong>Malware:</strong> All kinds of malicious programs and software used to corrupt or damage systems, steal confidential information, or break into networks.</li>
-    <li><strong>Phishing:</strong> Use of deceptive techniques to trick users into clicking links or sharing passwords.</li>
-    <li><strong>Denial-of-Service (DoS) and DDoS attacks:</strong> Flooding a server with too many requests so regular clients cannot connect.</li>
-    <li><strong>Advanced Persistent Threats (APTs):</strong> Highly qualified professionals entering a network and remaining there for months to collect and extract information secretly.</li>
-    <li><strong>Insider threats:</strong> Actions by users or employees, either intentional attacks or accidental errors.</li>
-  </ul>
-
-  <h4>2.1.4 Incident Response in Cybersecurity</h4>
-  <p>Incident response refers to the sequential approach employed by organizations in reaction to a detected cyberattack. Per NIST (2023), the procedure involves six stages: preparation, detection and analysis, containment, eradication, recovery, and post-incident activity. This is critical for minimizing potential harm while restoring operational capabilities promptly.</p>
-  <p>Successful incident response requires the utilization of security-related technologies combined with the involvement of human decision-makers. The existing approach is insufficient due to its reliance on manual intervention, which leads to delays in addressing cyberattacks, particularly when they are massive or intricate. This is why scholars are currently focused on exploring AI-driven and automated incident response procedures.</p>
-
-  <h4>2.1.5 Traditional Cybersecurity Approaches</h4>
-  <p>Conventional security software has been reliable until recently, but cannot cope with contemporary cybersecurity challenges. Most of these applications rely on signature-based detection — if hackers come up with any new malware or change existing malware, the conventional tool will not be able to detect it.</p>
-  <p>Additionally, conventional security tools are known for excessive alerting — issuing multiple alerts, most of which tend to be false. Security personnel become fatigued after receiving thousands of false alerts daily, making it difficult to pay attention to real attacks. Furthermore, these tools lack interoperability, making it challenging to coordinate security team efforts for threat detection across entire infrastructures.</p>
-
-  <h3>2.2 Artificial Intelligence (AI)</h3>
-
-  <h4>2.2.1 Definition and Overview</h4>
-  <p>Artificial Intelligence refers to programs written for computers to perform tasks that would normally be accomplished by humans — including problem solving, reasoning, pattern recognition, and many others. The majority of AI used today belongs to the category of "narrow AI" — a particular application that can complete a predetermined task extremely effectively. The key difference between AI and ordinary software is the ability to improve through practice and experience acquisition, constantly updating its knowledge base by acquiring new data.</p>
-
-  <h4>2.2.2 History of Artificial Intelligence</h4>
-  <p>Early AI was very basic and ran based on predefined rule sets, making it operate like a machine following an algorithm. It could not provide output when input did not align with the rule set. The emergence of machine learning allowed computers to identify patterns in data without being programmed to do so by humans. Today, AI uses deep learning — involving artificial neural networks that mimic some cognitive functions in human beings — to enable interpretation of images, text, and network traffic analysis.</p>
-
-  <h4>2.2.3 AI Tools and Techniques</h4>
-  <p>Machine learning comprises three main approaches: <strong>supervised learning</strong> (using pre-labeled data to derive conclusions), <strong>unsupervised learning</strong> (exploring data and discovering patterns automatically), and <strong>reinforcement learning</strong> (learning through experiments with rewards for correct actions).</p>
-  <p>Deep learning is a particular type of machine learning that uses neural networks to work with highly sophisticated data. Researchers rely on designs such as CNNs (Convolutional Neural Networks) and RNNs (Recurrent Neural Networks) to help computers detect images, recognize voice patterns, and identify suspicious activities within a network. Other methods include natural language processing and expert systems.</p>
-
-  <h4>2.2.4 Applications of AI in Different Fields</h4>
-  <ul class="report-list">
-    <li><strong>Healthcare:</strong> Helping doctors determine diseases and monitor patient health conditions.</li>
-    <li><strong>Finance and Banking:</strong> Detecting fraud, determining loan eligibility, and assessing risks.</li>
-    <li><strong>Transport:</strong> Managing traffic and enabling self-driving cars.</li>
-    <li><strong>Manufacturing:</strong> Predictive maintenance — diagnosing machines with potential breakdowns before they occur.</li>
-    <li><strong>Cybersecurity:</strong> Detecting potential threats, analyzing network behaviors, and stopping cyberattacks automatically.</li>
-  </ul>
-
-  <h4>2.2.5 Factors Impacting the Effectiveness of AI</h4>
-  <p>For an AI model to be effective: (1) A lot of unbiased data must be fed into the model — corrupted data leads to a model that makes mistakes due to bias. (2) Transparency in AI systems — the ability to explain why the AI came to a particular conclusion. Many intelligent machines, especially those employing deep learning, have been referred to as "black boxes" because the reasons for decisions are hard to comprehend, creating mistrust. Other factors include the amount of computing power needed and the number of people running the systems.</p>
-
-  <h3>2.3 Integration of AI in Cybersecurity</h3>
-
-  <h4>2.3.1 Relationship between AI and Cybersecurity</h4>
-  <p>AI and cybersecurity are linked due to the massive amounts of data produced by computers every day — including logs of internet traffic as well as users' actions on various devices. AI technologies are adept at processing such massive amounts of data, detecting hidden trends as well as unusual behavior.</p>
-  <p>One key strength of AI for cybersecurity is its ability to adapt to changes. Static rules are characteristic of traditional security methods, making any changes in threats challenging to incorporate. An AI-based security system can learn from each threat and update its defenses accordingly, making it particularly advantageous against zero-day attacks.</p>
-
-  <h4>2.3.2 AI for Enhancing Threat Detection</h4>
-  <p>AI systems can simultaneously analyze old and current data to detect whether network traffic is legitimate or malicious. Deep learning can find increasingly subtle patterns hidden within large datasets, improving detection results in high-traffic networks where attackers use sophisticated methods to evade detection.</p>
-  <p>Anomaly detection involves developing a model of typical network traffic and setting up alerts whenever deviation occurs. This method is effective for detecting insider threats and zero-day attacks that regular systems would otherwise overlook. AI operating in real time means threats can be identified much faster — helping contain them quickly while also reducing false positives.</p>
-
-  <h4>2.3.3 Incident Response and Threat Analysis using AI</h4>
-  <p>AI extends beyond threat detection — it makes important contributions to how companies address problems associated with breaches. The remedy process is usually lengthy and tedious, proving difficult when an attack needs to be contained immediately. AI assists through automation of activities and decision-making, leading to faster action and improved knowledge.</p>
-  <p>AI also assists in determining the scope of security incidents, correlating incidents to network activities, and implementing automatic actions like blocking malicious traffic and isolating affected systems. Additionally, AI is extremely helpful in retrospective analysis and understanding the root causes of intrusions, which is vital for developing preventive actions for future attacks.</p>
-
-  <h4>2.3.4 Technical Factors Influencing AI-based Threat Detection</h4>
-  <ul class="report-list">
-    <li><strong>Data Quality:</strong> For the algorithm to work properly, large amounts of reliable data are required. Inaccurate data may result in flawed conclusions and high false positive rates.</li>
-    <li><strong>Model Complexity:</strong> More complex deep-learning algorithms are likely to have better results in terms of threat identification, but may require significant computing resources and could be difficult for security experts to understand, thus lacking their full trust.</li>
-    <li><strong>Robustness:</strong> The capability of the system to resist manipulation attempts by an adversary who tries to mislead the AI by presenting carefully chosen inputs. Constant updating of the model is necessary to maintain resilience.</li>
-  </ul>
-
-  <h4>2.3.5 Future Trends in AI-driven Cybersecurity</h4>
-  <p>Current primary focus lies on developing <strong>Explainable AI (XAI)</strong> — making the rationale behind computations comprehensible to security experts, which will increase confidence among human users. Another area revolves around <strong>predictive AI</strong> — using past data to predict when and where future attacks might occur. Scientists are also improving AI algorithms for cloud computing and network security.</p>
-  <p>However, challenges remain: privacy, discrimination, biased algorithms, excessive automation reducing human attention, and the alarming trend of adversaries using AI to conduct more advanced attacks — fueling what some describe as a "digital arms race." Overall, AI is viewed as the best solution for increasing security, but its use must be carefully regulated to ensure safety and ethics.</p>
-</section>
-
-<!-- ══════════════════════════ CHAPTER 3 ══════════════════════════ -->
-<section id="ch3">
-  <div class="section-tag">Chapter 3</div>
-  <h2>Research Model and Hypotheses</h2>
-
-  <h3>3.1 Research Model</h3>
-  <p>This research is based on a model consisting of three main categories of variables:</p>
-  <ul class="report-list">
-    <li><strong>Independent Variables (Technical AI Skills):</strong> AI Threat Detection, AI Incident Response, and Technical Features of AI Systems.</li>
-    <li><strong>Dependent Variable:</strong> Effectiveness of Cybersecurity Threat Detection and Response.</li>
-    <li><strong>Moderating Variables (Human/Organizational Factors):</strong> Organizational Knowledge and Skills, Perceived Usefulness of AI, and Perceived Ease of Use.</li>
-  </ul>
-
-  <h4>3.1.1 Conceptual Research Framework</h4>
-  <p>The central assumption postulates that AI can improve the security situation significantly by helping teams identify risks faster and more accurately, while responding faster to attacks and maintaining efficiency. However, the relationship between AI and security is affected by organizational factors and people. AI will deliver results effectively only when workers have been professionally trained and the usefulness and usability of AI tools are clear to the team.</p>
-
-  <h4>3.1.2 Independent Variables</h4>
-
-  <p><strong>AI-based Threat Detection Capabilities:</strong> The ability of AI-powered devices to recognize cyber threats using data analysis. Traditional software is limited to identifying previously documented attacks, while AI-powered programs leverage machine learning to conduct data analysis. AI can recognize threats using supervised learning to categorize traffic as safe or malicious, and anomaly detection to identify zero-day attacks and internal threats.</p>
-
-  <p><strong>AI-based Incident Response Capabilities:</strong> The ability of AI systems to help or react on their own when faced with a threat — including ranking alerts by importance, correlating incidents, and performing automatic actions such as removing infiltrated hosts or blocking suspicious traffic without human input. Quick response is critical for ensuring minimal damage and enabling swift return to normalcy.</p>
-
-  <p><strong>Technical Factors of AI Systems:</strong> Technical factors form the basis of an effective AI-based security tool. This includes data quality and accuracy, ability to scale, and integration into existing security architecture. AI systems must also withstand adversarial attacks and be seamlessly integrated with other tools to offer any significant advantage.</p>
-
-  <h4>3.1.3 Dependent Variable</h4>
-  <p>The dependent variable is the <strong>Effectiveness of Cybersecurity Threat Detection and Response</strong> — the level of capability within a firm to detect any cyber threats and effectively react to security threats to avoid damage and return to regular operations. Signs of effectiveness include improved threat detection rate, shortened incident response time, and decrease in false positives.</p>
-
-  <h4>3.1.4 Organizational Factors (Moderating Variables)</h4>
-  <p><strong>Organizational Knowledge and Skills:</strong> The level of technical understanding and expertise that security teams possess in relation to AI-based cybersecurity tools. Teams with high levels of AI knowledge are better positioned to unlock the full potential of these tools, while untrained teams may mismanage even the most advanced systems.</p>
-  <p><strong>Perceived Usefulness of AI:</strong> The degree to which security professionals believe that using AI tools will improve their job performance. When users genuinely believe a tool helps them detect threats faster or reduces false alarms, they are more likely to trust it and use it consistently.</p>
-  <p><strong>Perceived Ease of Use:</strong> The degree to which security professionals believe that using AI cybersecurity tools requires minimal effort. Tools that are difficult to learn or integrate into existing workflows are unlikely to be used to their full potential, regardless of their technical capabilities.</p>
-
-  <h3>3.2 Research Hypotheses</h3>
-
-  <div class="hyp-grid">
-    <div class="hyp-card">
-      <div class="hyp-badge">H1</div>
-      <div>
-        <p>AI-based threat detection capabilities have a positive impact on the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result not-supported">Not supported (p=0.152)</span>
-      </div>
-    </div>
-    <div class="hyp-card">
-      <div class="hyp-badge">H2</div>
-      <div>
-        <p>AI-based incident response capabilities have a positive impact on the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result not-supported">Not supported (p=0.576)</span>
-      </div>
-    </div>
-    <div class="hyp-card">
-      <div class="hyp-badge">H3</div>
-      <div>
-        <p>Technical factors of AI systems positively influence the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result not-supported">Not supported (p=0.344)</span>
-      </div>
-    </div>
-    <div class="hyp-card">
-      <div class="hyp-badge">H4</div>
-      <div>
-        <p>Organizational knowledge and expertise positively moderate the relationship between AI-based capabilities and the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result not-supported">Not supported (p=0.608)</span>
-      </div>
-    </div>
-    <div class="hyp-card">
-      <div class="hyp-badge">H5</div>
-      <div>
-        <p>Perceived usefulness of AI positively moderates the relationship between AI-based capabilities and the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result supported">Supported (p&lt;0.001)</span>
-      </div>
-    </div>
-    <div class="hyp-card">
-      <div class="hyp-badge">H6</div>
-      <div>
-        <p>Perceived ease of use of AI systems positively moderates the relationship between AI-based capabilities and the effectiveness of cybersecurity threat detection and response.</p>
-        <span class="hyp-result not-supported">Not supported (p=0.634)</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════ CHAPTER 4 ══════════════════════════ -->
-<section id="ch4">
-  <div class="section-tag">Chapter 4</div>
-  <h2>Methodology</h2>
-
-  <h3>4.1 Introduction</h3>
-  <p>This chapter provides an overview of the design and methodology used in the research. This chapter is the roadmap of procedures employed to determine the influence of artificial intelligence on improving cybersecurity. A questionnaire survey was used to collect quantitative data — allowing collection of opinions and knowledge from participants effectively.</p>
-
-  <h3>4.2 Research Strategy</h3>
-  <p>A quantitative strategy was applied through surveys. The quantitative approach was chosen to measure the level of awareness of individuals regarding AI and cybersecurity in an organized manner based on certain scales and standards, allowing consistent data collection and easy comparison among participants.</p>
-
-  <h4>4.2.1 Research Approach</h4>
-  <p>This research uses a quantitative research methodology, emphasizing the use of numbers to observe trends in collected data. Data was collected via a questionnaire distributed on Google Forms, helping measure the percentage of people who have heard about AI, their cybersecurity awareness levels, and their attitudes towards AI technology.</p>
-
-  <h4>4.2.2 Research Philosophy</h4>
-  <p>A positivist approach was used in terms of epistemology — meaning knowledge is gained not only through people's subjective experiences or narratives, but from observations and measurable information. Fixed quantitative questions using a Likert scale ranging from "Strongly Agree" to "Strongly Disagree" were utilized to stay objective, transforming subjective information into objective statistics.</p>
-
-  <h3>4.3 Research Methods</h3>
-  <p>A questionnaire was used for data gathering — the most efficient method when gathering information from a large population in less time. It addressed the level of understanding of AI by individuals, cybersecurity abilities of the respondents, and their views on using AI-based security tools.</p>
-
-  <h4>4.3.1 Questionnaire-Based Survey</h4>
-  <p>A structured questionnaire was developed using Google Forms with sections covering demographic details (gender, age, education, specialization) and attitudes towards AI technology in cybersecurity using a five-point Likert scale from "Strongly Agree" to "Strongly Disagree".</p>
-
-  <h4>4.3.2 Advantages of Using Google Forms</h4>
-  <p>Google Forms was selected for its speed and convenience. Since the survey was distributed online, a considerable number of 250 respondents were engaged in no time using an easy-to-share link. Responses are stored automatically with immediate access to base charts and summaries.</p>
-
-  <h4>4.3.3 Limitations of the Method</h4>
-  <ul class="report-list">
-    <li>Closed questions made it impossible for respondents to give more elaborate explanations concerning their responses.</li>
-    <li>Respondents may have answered quickly without reading all statements carefully.</li>
-    <li>Respondents' interpretations might affect results since it was conducted online.</li>
-  </ul>
-
-  <h3>4.4 Sample Selection</h3>
-  <p>The respondents include university students and IT practitioners who are knowledgeable about AI and cybersecurity. Convenience sampling was used as the sampling technique — the questionnaire was sent out via WhatsApp chat groups of university students and IT/cybersecurity personnel. In total, 250 responses were received, all validated and used for analysis.</p>
-
-  <h4>4.4.1 Target Population</h4>
-  <p>People with a certain degree of knowledge or experience in AI and cybersecurity in the academic or professional sphere — including university students studying Information Technology, Computer Science, Engineering, and Cybersecurity; and IT/cybersecurity professionals. Students studying technical fields are particularly valuable because they are constantly acquainted with emerging changes in AI and cybersecurity throughout their academic training.</p>
-
-  <h4>4.4.2 Sampling Technique</h4>
-  <p>Convenience sampling was used — a non-probability technique whereby the subjects most easily accessible to the researcher are selected. The questionnaire was distributed through WhatsApp groups consisting of university students and anyone with knowledge about IT or cybersecurity. While not the best sampling from a generalizability perspective, it is perfectly adequate for exploratory or descriptive studies.</p>
-
-  <h4>4.4.3 Sample Size</h4>
-  <p>250 responses were collected. Each submission was reviewed to ensure it was finished and that the individual had worked on the questions. Answers that left obligatory questions blank, or answers that resembled randomly selected responses (same option marked for each question), were eliminated. Following this review, all 250 responses were validated and retained for analysis.</p>
-
-  <h3>4.5 Data Collection</h3>
-  <p>Primary data were gathered using an online questionnaire created and administered via Google Forms, from 1st November 2025 to 1st May 2026. The questionnaire consisted of four parts:</p>
-  <ul class="report-list">
-    <li><strong>Part 1 (Demographic):</strong> Gender, age range, education, specialization.</li>
-    <li><strong>Part 2 (General Awareness):</strong> Statements concerning knowledge of basic principles and cybersecurity threats.</li>
-    <li><strong>Part 3 (Research Model Constructs):</strong> Six constructs including AI-based threat detection, AI-based incident response, technical features, knowledge and skills, usefulness, ease of use, and the dependent variable of effectiveness.</li>
-    <li><strong>Part 4 (Overall Opinion):</strong> General attitudes towards the application of AI in cybersecurity.</li>
-  </ul>
-
-  <h4>4.5.2 Questionnaire Structure</h4>
-  <p>The questionnaire was categorized into four sections using a five-point Likert scale. Section A covered demographic information. Section B assessed general awareness of AI and cybersecurity through eight statements total. Section C (the largest and most directly related to the research model) had seven constructs, each with five Likert-scale statements. Section D captured general attitudes toward AI in cybersecurity with four statements.</p>
-
-  <h4>4.5.3 Data Collection Procedure</h4>
-  <p>The questionnaire was distributed via WhatsApp to groups containing students and individuals with IT or cybersecurity backgrounds. An introductory paragraph was provided stating what the study was, that participation was voluntary, that responses would be kept fully anonymous, and that it would take approximately five to seven minutes. There are no correct or wrong answers.</p>
-
-  <h4>4.5.4 Research Framework</h4>
-  <p>The framework shows how the key factors are interconnected. The independent variables (AI-based Threat Detection, AI-based Incident Response, Technical Features of AI Systems) are expected to directly affect the primary dependent variable: Effectiveness of Cybersecurity Threat Detection and Response. Three supporting variables (Knowledge and Skills, Usefulness of AI, Ease of Use) reflect human and usability aspects that also contribute to understanding outcomes.</p>
-
-  <h3>4.6 Data Analysis</h3>
-  <p>Analysis consisted of data cleaning, analysis methods, and identification of the research tools used. Responses were screened: those with blank mandatory answers were excluded, and those showing clearly random patterns (same scale option for every question) were also rejected as invalid. All 250 remaining responses were validated.</p>
-
-  <h4>4.6.1 Data Preparation</h4>
-  <p>Each submission was verified to ensure responses to all mandatory questions were provided. Where responses had been omitted or where there were signs the respondent had not devoted sufficient attention (straight-lining), submissions were removed. A total of 250 responses survived the screening process.</p>
-
-  <h4>4.6.2 Data Analysis Techniques</h4>
-  <p>Analysis was based on descriptive statistics — interpreting collected data to make summaries and descriptions without statistical inferences. Frequency counts and percentages were computed for demographic variables. Mean scores were computed for Likert-scale questions. A mean score > 3.0 indicates overall agreement; < 3.0 indicates overall disagreement. Frequency distributions were also considered. Charts and graphs were constructed for visualization.</p>
-
-  <h4>4.6.3 Tools Used for Analysis</h4>
-  <p>Google Forms was the primary tool, automatically generating visual summaries including pie charts and bar charts as responses were collected. Researchers also analyzed data within Google Forms by examining trends in participants' responses and making comparisons across questions. SPSS (Statistical Package for the Social Sciences) was used for Cronbach's Alpha reliability analysis and multiple linear regression hypothesis testing.</p>
-</section>
-
-<!-- ══════════════════════════ CHAPTER 5 ══════════════════════════ -->
-<section id="ch5">
-  <div class="section-tag">Chapter 5</div>
-  <h2>Data Analysis and Results</h2>
-
-  <h3>5.1 Introduction</h3>
-  <p>This chapter contains the analysis and interpretation of data collected through the online survey questionnaire. The aim is to find out the level of awareness among participants regarding the application of AI technology to enhance threat detection capability in improving cybersecurity. The analysis starts with demographic data, followed by validity and reliability analysis, and then data analysis for all constructs of the survey.</p>
-
-  <h3>5.2 Demographic Analysis</h3>
-
-  <h4>5.2.1 Gender Distribution</h4>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Gender</th><th>Frequency</th><th>Percentage</th></tr></thead>
-      <tbody>
-        <tr><td>Female</td><td>159</td><td>63.6%</td></tr>
-        <tr><td>Male</td><td>91</td><td>36.4%</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>250</strong></td><td><strong>100%</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>The survey results revealed that the majority of respondents were female, accounting for 63.6% of the total sample, while male respondents made up the remaining 36.4%.</p>
-
-  <h4>5.2.2 Age Group Distribution</h4>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Age Group</th><th>Frequency</th><th>Percentage</th></tr></thead>
-      <tbody>
-        <tr><td>Under 18</td><td>23</td><td>9.2%</td></tr>
-        <tr><td>18–20</td><td>78</td><td>31.2%</td></tr>
-        <tr><td>20–25</td><td>113</td><td>45.2%</td></tr>
-        <tr><td>26 and Above</td><td>36</td><td>14.4%</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>250</strong></td><td><strong>100%</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>The largest group (45.2%) fell within the 20–25 years age range, followed by 18–20 years (31.2%), 26 and above (14.4%), and under 18 (9.2%). The majority of participants were university-aged individuals.</p>
-
-  <h4>5.2.3 Educational Level</h4>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Educational Level</th><th>Frequency</th><th>Percentage</th></tr></thead>
-      <tbody>
-        <tr><td>Associate Diploma</td><td>39</td><td>15.6%</td></tr>
-        <tr><td>Bachelor's Degree</td><td>151</td><td>60.4%</td></tr>
-        <tr><td>Master's Degree</td><td>40</td><td>16%</td></tr>
-        <tr><td>PhD</td><td>8</td><td>3.2%</td></tr>
-        <tr><td>Other</td><td>12</td><td>4.8%</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>250</strong></td><td><strong>100%</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>Most respondents (60.4%) were enrolled in a Bachelor's Degree program, followed by Master's Degree (16%), Associate Diploma (15.6%), Other (4.8%), and PhD (3.2%).</p>
-
-  <h4>5.2.4 Field of Study</h4>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Field of Study</th><th>Frequency</th><th>Percentage</th></tr></thead>
-      <tbody>
-        <tr><td>Information Technology</td><td>124</td><td>49.6%</td></tr>
-        <tr><td>Business</td><td>45</td><td>18%</td></tr>
-        <tr><td>Engineering</td><td>43</td><td>17.2%</td></tr>
-        <tr><td>Science</td><td>24</td><td>9.6%</td></tr>
-        <tr><td>Other</td><td>14</td><td>5.6%</td></tr>
-        <tr><td><strong>Total</strong></td><td><strong>250</strong></td><td><strong>100%</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>IT students made up the largest group (49.6%), followed by Business (18%), Engineering (17.2%), Science (9.6%), and Other (5.6%).</p>
-
-  <h3>5.3 Data Validity and Reliability</h3>
-
-  <h4>5.3.1 Validity Analysis</h4>
-  <p>Content validity was established through an extensive literature review during the questionnaire design phase. Each question was developed based on established constructs from prior studies on AI adoption and cybersecurity effectiveness. The questionnaire was evaluated and approved by the supervisor before distribution.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Test</th><th>Value</th></tr></thead>
-      <tbody>
-        <tr><td>KMO Measure of Sampling Adequacy</td><td>0.948</td></tr>
-        <tr><td>Bartlett's Test — Approx. Chi-Square</td><td>4394.609</td></tr>
-        <tr><td>Degrees of Freedom (df)</td><td>276</td></tr>
-        <tr><td>Significance (Sig.)</td><td>&lt;0.001</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p>Factor loadings were all above the suggested threshold of 0.70, indicating construct validity. AVE scores were all above the suggested threshold of 0.50, indicating convergent validity.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Construct</th><th>Item</th><th>Factor Loading</th><th>AVE</th></tr></thead>
-      <tbody>
-        <tr><td rowspan="4">AI-based Threat Detection</td><td>V14</td><td>0.860</td><td rowspan="4">0.767</td></tr>
-        <tr><td>V15</td><td>0.888</td></tr>
-        <tr><td>V16</td><td>0.903</td></tr>
-        <tr><td>V17</td><td>0.850</td></tr>
-        <tr><td rowspan="4">AI-based Incident Response</td><td>V18</td><td>0.841</td><td rowspan="4">0.788</td></tr>
-        <tr><td>V19</td><td>0.907</td></tr>
-        <tr><td>V20</td><td>0.907</td></tr>
-        <tr><td>V21</td><td>0.894</td></tr>
-        <tr><td rowspan="4">Technical Features of AI Systems</td><td>V22</td><td>0.898</td><td rowspan="4">0.833</td></tr>
-        <tr><td>V23</td><td>0.923</td></tr>
-        <tr><td>V24</td><td>0.913</td></tr>
-        <tr><td>V25</td><td>0.916</td></tr>
-        <tr><td rowspan="4">Knowledge and Skills</td><td>V26</td><td>0.890</td><td rowspan="4">0.807</td></tr>
-        <tr><td>V27</td><td>0.891</td></tr>
-        <tr><td>V28</td><td>0.920</td></tr>
-        <tr><td>V29</td><td>0.893</td></tr>
-        <tr><td rowspan="4">Usefulness of AI</td><td>V30</td><td>0.903</td><td rowspan="4">0.840</td></tr>
-        <tr><td>V31</td><td>0.931</td></tr>
-        <tr><td>V32</td><td>0.914</td></tr>
-        <tr><td>V33</td><td>0.919</td></tr>
-        <tr><td rowspan="4">Ease of Use</td><td>V34</td><td>0.918</td><td rowspan="4">0.859</td></tr>
-        <tr><td>V35</td><td>0.945</td></tr>
-        <tr><td>V36</td><td>0.916</td></tr>
-        <tr><td>V37</td><td>0.928</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h4>5.3.2 Reliability Analysis</h4>
-  <p>Cronbach's Alpha was computed for each of the six constructs using SPSS. Scores greater than 0.70 are acceptable, greater than 0.80 are good, and greater than 0.90 are considered excellent. The six constructs obtained values ranging from 0.897 to 0.945 — indicating good to excellent internal consistency.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Construct</th><th>Items</th><th>Cronbach's α</th><th>Interpretation</th></tr></thead>
-      <tbody>
-        <tr><td>AI-based Threat Detection</td><td>4</td><td>0.897</td><td>Good</td></tr>
-        <tr><td>AI-based Incident Response</td><td>4</td><td>0.909</td><td>Excellent</td></tr>
-        <tr><td>Technical Features of AI Systems</td><td>4</td><td>0.932</td><td>Excellent</td></tr>
-        <tr><td>Knowledge and Skills</td><td>4</td><td>0.920</td><td>Excellent</td></tr>
-        <tr><td>Usefulness of AI</td><td>4</td><td>0.936</td><td>Excellent</td></tr>
-        <tr><td>Ease of Use</td><td>4</td><td>0.945</td><td>Excellent</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>5.4 Data Analysis</h3>
-  <p>A mean score &gt; 3.0 indicates overall agreement; &lt; 3.0 indicates overall disagreement. Higher scores around 4.0–5.0 mean greater agreement.</p>
-
-  <h4>5.4.1 General Awareness of Artificial Intelligence (Mean: 3.50)</h4>
-  <div class="bar-row"><div class="bar-label">AI technologies increasingly important</div><div class="bar-track"><div class="bar-fill" style="width:71.2%"></div></div><div class="bar-val">3.56</div></div>
-  <div class="bar-row"><div class="bar-label">Know what AI means</div><div class="bar-track"><div class="bar-fill" style="width:69.6%"></div></div><div class="bar-val">3.48</div></div>
-  <div class="bar-row"><div class="bar-label">Understand AI can detect threats</div><div class="bar-track"><div class="bar-fill" style="width:69.8%"></div></div><div class="bar-val">3.49</div></div>
-  <div class="bar-row"><div class="bar-label">Know AI is used in cybersecurity</div><div class="bar-track"><div class="bar-fill" style="width:69.2%"></div></div><div class="bar-val">3.46</div></div>
-  <p style="margin-top:1rem;">Overall, results indicate that participants have a level of basic understanding about AI and its roles in cybersecurity, with a high percentage of respondents in the "neutral" category reflecting some confusion, particularly among those from outside the IT field.</p>
-
-  <h4>5.4.2 General Awareness of Cybersecurity (Mean: 3.56)</h4>
-  <div class="bar-row"><div class="bar-label">Aware of org/school cybersecurity policies</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-val">3.60</div></div>
-  <div class="bar-row"><div class="bar-label">Know what cybersecurity means</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</div></div>
-  <div class="bar-row"><div class="bar-label">Aware of common cybersecurity threats</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</div></div>
-  <div class="bar-row"><div class="bar-label">Take steps to protect info online</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</div></div>
-  <p style="margin-top:1rem;">Most respondents possess a decent amount of cybersecurity knowledge and awareness. The marginally higher score for policy awareness might suggest that awareness of security measures is being effectively instilled in educational institutions in Bahrain.</p>
-
-  <h4>5.4.3 AI-based Threat Detection Capabilities (Mean: 3.58)</h4>
-  <div class="bar-row"><div class="bar-label">AI improves threat detection accuracy</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-val">3.60</div></div>
-  <div class="bar-row"><div class="bar-label">AI detects new/unseen threats</div><div class="bar-track"><div class="bar-fill" style="width:71.6%"></div></div><div class="bar-val">3.58</div></div>
-  <div class="bar-row"><div class="bar-label">AI finds threats faster than traditional methods</div><div class="bar-track"><div class="bar-fill" style="width:71.2%"></div></div><div class="bar-val">3.56</div></div>
-  <div class="bar-row"><div class="bar-label">AI notices unusual activities quickly</div><div class="bar-track"><div class="bar-fill" style="width:71.2%"></div></div><div class="bar-val">3.56</div></div>
-  <p style="margin-top:1rem;">Consistency of responses across all four questions with agreement rates above 58% indicates a generally positive perception of AI threat detection capabilities. Accuracy improvement having the most agreement aligns with literature showing machine learning can outperform traditional signature-based methods.</p>
-
-  <h4>5.4.4 AI-based Incident Response Capabilities (Mean: 3.49)</h4>
-  <div class="bar-row"><div class="bar-label">AI makes handling incidents easier</div><div class="bar-track"><div class="bar-fill" style="width:71%"></div></div><div class="bar-val">3.55</div></div>
-  <div class="bar-row"><div class="bar-label">AI helps automated actions during incidents</div><div class="bar-track"><div class="bar-fill" style="width:70.6%"></div></div><div class="bar-val">3.53</div></div>
-  <div class="bar-row"><div class="bar-label">AI can reduce damage from attacks</div><div class="bar-track"><div class="bar-fill" style="width:69.2%"></div></div><div class="bar-val">3.46</div></div>
-  <div class="bar-row"><div class="bar-label">AI helps systems respond faster to incidents</div><div class="bar-track"><div class="bar-fill" style="width:68.4%"></div></div><div class="bar-val">3.42</div></div>
-  <p style="margin-top:1rem;">This construct had the lowest overall mean (3.49), suggesting that respondents are slightly less confident of AI's role during the response phase — possibly because incident response is a more complex, detailed task and trust during that phase is more dependent on context and experience.</p>
-
-  <h4>5.4.5 Technical Features of AI Systems (Mean: 3.58)</h4>
-  <div class="bar-row"><div class="bar-label">AI adapts to new threats over time</div><div class="bar-track"><div class="bar-fill" style="width:72.6%"></div></div><div class="bar-val">3.63</div></div>
-  <div class="bar-row"><div class="bar-label">AI can process large amounts of data</div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><div class="bar-val">3.60</div></div>
-  <div class="bar-row"><div class="bar-label">AI systems are accurate and effective</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</td></div>
-  <div class="bar-row"><div class="bar-label">AI systems are reliable in improving security</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</div></div>
-  <p style="margin-top:1rem;">High consensus on adaptability highlights the technical benefits of learning and evolving AI. The slightly lower levels of agreement regarding reliability reflect an ongoing concern about the consistency of AI systems in actual usage.</p>
-
-  <h4>5.4.6 Knowledge and Skills (Mean: 3.57)</h4>
-  <div class="bar-row"><div class="bar-label">Lack of expertise limits AI effectiveness</div><div class="bar-track"><div class="bar-fill" style="width:72.8%"></div></div><div class="bar-val">3.64</div></div>
-  <div class="bar-row"><div class="bar-label">Technical knowledge increases AI benefits</div><div class="bar-track"><div class="bar-fill" style="width:72.6%"></div></div><div class="bar-val">3.63</div></div>
-  <div class="bar-row"><div class="bar-label">Organizations have trained AI users</div><div class="bar-track"><div class="bar-fill" style="width:70.2%"></div></div><div class="bar-val">3.51</div></div>
-  <div class="bar-row"><div class="bar-label">Organizations provide sufficient AI training</div><div class="bar-track"><div class="bar-fill" style="width:70.2%"></div></div><div class="bar-val">3.51</div></div>
-  <p style="margin-top:1rem;">A very telling pattern: respondents clearly understood the need for skills and the real problem of lacking them. But they were less sure about organizations investing in developing that expertise through training — a practical challenge organizations need to address to realize the full benefits of AI.</p>
-
-  <h4>5.4.7 Usefulness of AI (Mean: 3.57)</h4>
-  <div class="bar-row"><div class="bar-label">AI improves overall cybersecurity performance</div><div class="bar-track"><div class="bar-fill" style="width:72.2%"></div></div><div class="bar-val">3.61</div></div>
-  <div class="bar-row"><div class="bar-label">AI is useful for improving cybersecurity</div><div class="bar-track"><div class="bar-fill" style="width:72.2%"></div></div><div class="bar-val">3.61</div></div>
-  <div class="bar-row"><div class="bar-label">AI adds value to cybersecurity tasks</div><div class="bar-track"><div class="bar-fill" style="width:71.4%"></div></div><div class="bar-val">3.57</div></div>
-  <div class="bar-row"><div class="bar-label">AI helps make better security decisions</div><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div><div class="bar-val">3.50</div></div>
-  <p style="margin-top:1rem;">The strongest agreement that AI gives a valuable contribution to operations and helps improve performance implies respondents feel AI is a real contribution to cybersecurity. A slightly lower score on decision-making support stems from uncertainty regarding AI's direct use for strategic security decisions.</p>
-
-  <h4>5.4.8 Ease of Use (Mean: 3.40 — lowest construct)</h4>
-  <div class="bar-row"><div class="bar-label">AI cybersecurity tools are easy to use</div><div class="bar-track"><div class="bar-fill" style="width:70.8%"></div></div><div class="bar-val">3.54</div></div>
-  <div class="bar-row"><div class="bar-label">Using AI-based tools is more comfortable</div><div class="bar-track"><div class="bar-fill" style="width:70.4%"></div></div><div class="bar-val">3.52</div></div>
-  <div class="bar-row"><div class="bar-label">Learning to use AI tools is simple</div><div class="bar-track"><div class="bar-fill" style="width:69.2%"></div></div><div class="bar-val">3.46</div></div>
-  <div class="bar-row"><div class="bar-label">Easy to integrate AI into existing systems</div><div class="bar-track"><div class="bar-fill" style="width:68.8%"></div></div><div class="bar-val">3.44</div></div>
-  <p style="margin-top:1rem;">Lower ratings in learning simplicity and integration make sense — many respondents are students who may not have first-hand experience with enterprise-grade AI security tools. More conservative responses on integration reflect the technical difficulty and cost of such work.</p>
-
-  <h4>5.4.9 Effectiveness of Cybersecurity Threat Detection and Response (Mean: 3.52)</h4>
-  <div class="bar-row"><div class="bar-label">AI enhances overall cybersecurity performance</div><div class="bar-track"><div class="bar-fill" style="width:71.6%"></div></div><div class="bar-val">3.58</div></div>
-  <div class="bar-row"><div class="bar-label">AI improves speed of detecting threats</div><div class="bar-track"><div class="bar-fill" style="width:70.6%"></div></div><div class="bar-val">3.53</div></div>
-  <div class="bar-row"><div class="bar-label">AI improves ability to prevent cyber attacks</div><div class="bar-track"><div class="bar-fill" style="width:69.8%"></div></div><div class="bar-val">3.49</div></div>
-  <div class="bar-row"><div class="bar-label">AI reduces number of false alarms</div><div class="bar-track"><div class="bar-fill" style="width:69.4%"></div></div><div class="bar-val">3.47</div></div>
-  <p style="margin-top:1rem;">Findings align with respondents' perception of AI's positive impact on overall cybersecurity effectiveness. The relative lack of consensus for false alarm reduction and attack prevention may demonstrate awareness that these outcomes depend on the quality of the AI model and the expertise available to maintain it.</p>
-
-  <h4>5.4.10 Overall Opinion (Mean: 3.64 — highest construct)</h4>
-  <div class="bar-row"><div class="bar-label">I support the use of AI in cybersecurity</div><div class="bar-track"><div class="bar-fill" style="width:73.6%"></div></div><div class="bar-val">3.68</div></div>
-  <div class="bar-row"><div class="bar-label">I would recommend adoption of AI tools</div><div class="bar-track"><div class="bar-fill" style="width:73.4%"></div></div><div class="bar-val">3.67</div></div>
-  <div class="bar-row"><div class="bar-label">AI will be important for future of cybersecurity</div><div class="bar-track"><div class="bar-fill" style="width:72.8%"></div></div><div class="bar-val">3.64</div></div>
-  <div class="bar-row"><div class="bar-label">Organizations should invest more in AI</div><div class="bar-track"><div class="bar-fill" style="width:71.6%"></div></div><div class="bar-val">3.58</div></div>
-  <p style="margin-top:1rem;">Consistently high agreement scores suggest that the overall sentiment is strongly positive toward AI in cybersecurity. Support and recommendation items scored highest, while investment advocacy scored slightly lower — reflecting pragmatic awareness that funding decisions are complex, even when the technology is viewed favorably.</p>
-
-  <h3>5.5 Hypotheses Testing</h3>
-  <p>Multiple linear regression was employed using SPSS. The perceived effectiveness of cybersecurity threat detection and response was selected as the dependent variable; the six constructs as independent variables. Significance level set at 0.05. The regression equation is highly significant (F = 198.928, p &lt; 0.001). R² = 0.918 — the six constructs explain 91.8% of the variance in perceived cybersecurity effectiveness.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Variable</th>
-          <th>B</th>
-          <th>Std. Error</th>
-          <th>Beta</th>
-          <th>t-value</th>
-          <th>Sig.</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>(Constant)</td><td>-0.143</td><td>0.098</td><td>—</td><td>-1.461</td><td>0.147</td></tr>
-        <tr><td>AI Threat Detection</td><td>0.127</td><td>0.088</td><td>0.120</td><td>1.444</td><td>0.152</td></tr>
-        <tr><td>Incident Response</td><td>0.047</td><td>0.084</td><td>0.045</td><td>0.561</td><td>0.576</td></tr>
-        <tr><td>Technical Features</td><td>0.092</td><td>0.097</td><td>0.087</td><td>0.950</td><td>0.344</td></tr>
-        <tr><td>Knowledge and Skills</td><td>0.064</td><td>0.125</td><td>0.060</td><td>0.514</td><td>0.608</td></tr>
-        <tr><td><strong>Perceived Usefulness</strong></td><td><strong>0.731</strong></td><td><strong>0.078</strong></td><td><strong>0.720</strong></td><td><strong>9.401</strong></td><td><strong>&lt;0.001</strong></td></tr>
-        <tr><td>Ease of Use</td><td>-0.039</td><td>0.081</td><td>-0.039</td><td>-0.478</td><td>0.634</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="stat-row">
-    <div class="stat-card"><span class="stat-number">0.958</span><span class="stat-label">R</span></div>
-    <div class="stat-card"><span class="stat-number">0.918</span><span class="stat-label">R²</span></div>
-    <div class="stat-card"><span class="stat-number">0.914</span><span class="stat-label">Adj. R²</span></div>
-    <div class="stat-card"><span class="stat-number">198.9</span><span class="stat-label">F-statistic</span></div>
-  </div>
-
-  <h3>5.6 Decision</h3>
-  <p>Among the six hypotheses, only H5 (Perceived Usefulness) was statistically supported at the 0.05 significance level (β = 0.720, p &lt; 0.001). This finding indicates that Perceived Usefulness is the strongest and most significant predictor of cybersecurity effectiveness among all six constructs.</p>
-  <p>The regression model did not statistically support the remaining five hypotheses, which may be attributed to multicollinearity among the highly intercorrelated constructs. Nevertheless, the overall model has excellent explanatory power (R² = 0.918), and the positive Beta values for H1, H2, H3, and H4 indicate positive directional relationships consistent with the theoretical framework.</p>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Hypothesis</th><th>Statement</th><th>Beta</th><th>Sig.</th><th>Result</th></tr></thead>
-      <tbody>
-        <tr><td>H1</td><td>AI Threat Detection → Effectiveness</td><td>0.120</td><td>0.152</td><td>Not Supported</td></tr>
-        <tr><td>H2</td><td>AI Incident Response → Effectiveness</td><td>0.045</td><td>0.576</td><td>Not Supported</td></tr>
-        <tr><td>H3</td><td>Technical Features → Effectiveness</td><td>0.087</td><td>0.344</td><td>Not Supported</td></tr>
-        <tr><td>H4</td><td>Knowledge and Skills → Effectiveness</td><td>0.060</td><td>0.608</td><td>Not Supported</td></tr>
-        <tr><td><strong>H5</strong></td><td><strong>Perceived Usefulness → Effectiveness</strong></td><td><strong>0.720</strong></td><td><strong>&lt;0.001</strong></td><td><strong>Supported ✓</strong></td></tr>
-        <tr><td>H6</td><td>Ease of Use → Effectiveness</td><td>-0.039</td><td>0.634</td><td>Not Supported</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ══════════════════════════ CHAPTER 6 ══════════════════════════ -->
-<section id="ch6">
-  <div class="section-tag">Chapter 6</div>
-  <h2>Conclusion and Future Work</h2>
-
-  <h3>6.1 Introduction</h3>
-  <p>This chapter captures the results from the analysis of the research performed on artificial intelligence for improving the detection of cybersecurity threats. The research was conducted at the University of Bahrain and involved a study to determine how students and IT personnel view the use of AI-based tools for enhancing cybersecurity.</p>
-
-  <h3>6.2 Summary of Findings</h3>
-  <p>Data collection was completed using an online survey on Google Forms, receiving 250 valid responses from students and professionals from technology-related industries. Questions related to six key areas were asked: awareness of AI, awareness of cybersecurity, application of AI for threat detection, application of AI for incident response, technical factors, and organizational factors.</p>
-  <ul class="report-list">
-    <li>Most participants were aware of what AI is and how it is applied in cybersecurity, seeing it as an advantage against cyber threats. 49.6% came from the IT field.</li>
-    <li>There was a high level of cybersecurity awareness in the sample — participants knew common threats like phishing or malware and claimed to employ measures to protect themselves online.</li>
-    <li>AI technology for threat detection was positively assessed — participants believed AI helped detect threats faster and with higher efficiency compared to traditional methods.</li>
-    <li>AI for incident response also received positive assessments — respondents believed AI allowed organizations to react faster, minimize attack impact, and automate incident response processes.</li>
-    <li>Regarding technical factors, respondents believed AI systems could be trusted and able to process large amounts of cybersecurity data, though some doubts remained about real-life performance.</li>
-    <li>The higher the rating in terms of usefulness and accessibility, the more confidence participants had regarding AI tools' overall effectiveness — consistent with UTAUT theory predictions.</li>
-  </ul>
-
-  <h3>6.3 Conclusion</h3>
-  <p>The research confirms a positive perception of AI technology in terms of threat detection and response capabilities. The fact that respondents' positive perception includes technical factors, as well as important organizational aspects such as ease of use and usefulness, is interesting — it implies that even with high performance capabilities, an AI-based tool can bring less than expected benefits due to organizational-level problems.</p>
-  <p>The research proves that the role of AI technology in improving cybersecurity in educational institutions and organizations in Bahrain is significant but needs to be implemented carefully, with equal attention to technical and organizational readiness.</p>
-
-  <h3>6.4 Project Contributions and Limitations</h3>
-
-  <h4>6.4.1 Contributions to the Cybersecurity Field</h4>
-  <ul class="report-list">
-    <li><strong>Local data from Bahrain:</strong> Adds novelty as such an approach is quite rare in existing research, with practical value for decision makers and educators in the GCC region.</li>
-    <li><strong>Holistic approach:</strong> While other authors limit themselves to purely technical assessments, this research explores both technical and organizational dimensions equally.</li>
-    <li><strong>Student-oriented data:</strong> In contrast to other empirical works using experts, this research collects data from students who will become the future cybersecurity experts.</li>
-  </ul>
-
-  <h4>6.4.2 Limitations of the Study</h4>
-  <ul class="report-list">
-    <li><strong>Sampling method:</strong> Distributed through personal and digital networks — not randomly selected, potentially skewing toward people already comfortable with AI and cybersecurity, which may have inflated positive results.</li>
-    <li><strong>Self-reported survey data:</strong> Participants reported perceptions and opinions, not actual behavior or experience with real AI cybersecurity systems.</li>
-    <li><strong>Student-heavy sample:</strong> Heavily leaned toward undergraduate IT students, limiting applicability to working professionals or non-technical staff.</li>
-    <li><strong>No experimental testing:</strong> Conclusions based on perceptions rather than measured performance data — they should be seen as indicative rather than definitive.</li>
-  </ul>
-
-  <h3>6.5 Recommendations</h3>
-
-  <h4>6.5.1 Practical Recommendations for IT Professionals</h4>
-  <ul class="report-list">
-    <li>Gain experience working with AI-enabled security solutions such as ML-enhanced SIEM and SOAR features — conduct practical experiments in safe conditions.</li>
-    <li>Incorporate human expertise into work with AI systems — AI solutions require oversight, and humans remain responsible for making security-related decisions.</li>
-    <li>Know how to use AI solutions correctly — understand risks such as adversarial attacks, potential model drifts, and excessive reliance on automation. Conduct routine audits of AI performance.</li>
-    <li>Request that vendors provide AI-enabled tools capable of generating explainable outputs — summaries and explanations of why certain actions were considered.</li>
-  </ul>
-
-  <h4>6.5.2 Academic Recommendations for Cybersecurity Education</h4>
-  <ul class="report-list">
-    <li>Educational establishments in Bahrain should add special modules dealing with AI for security — not just introducing ML concepts, but applying them in intrusion detection and log analysis tasks.</li>
-    <li>Prefer scenario learning where students work with simulated attack scenarios and respond using AI cybersecurity tools.</li>
-    <li>Universities should establish cooperation with cybersecurity companies and governmental structures to provide internship opportunities.</li>
-    <li>Ethics and governance should be included in courses focused on AI for cybersecurity applications.</li>
-  </ul>
-
-  <h4>6.5.3 Policy Recommendations for Organizations in Bahrain</h4>
-  <ul class="report-list">
-    <li>Implement a clear strategy for adopting and integrating AI cybersecurity solutions — define clear goals, identify security functions that can be automated, and develop performance metrics.</li>
-    <li>Develop national-level policies or guidelines for AI in cybersecurity in Bahrain, based on internationally recognized standards such as the NIST AI Risk Management Framework.</li>
-    <li>Focus on workforce development initiatives — providing security professionals with adequate training opportunities and creating career paths, such as professional certifications in AI cybersecurity.</li>
-    <li>Facilitate cross-sector collaborations to discuss cybersecurity threats and AI response strategies, enabling organizations throughout Bahrain to learn from each other.</li>
-  </ul>
-
-  <h3>6.6 Future Work</h3>
-  <ul class="report-list">
-    <li><strong>Larger and more varied sample:</strong> Future research needs to analyze opinions of IT managers and employees of larger companies in banking, healthcare, and governmental agencies — comparing with student perceptions to understand AI implementation reality in Bahrain.</li>
-    <li><strong>Quantitative experiments:</strong> Move from perceptions to actual measurement — compare efficiency of humans vs. AI in detecting malware attacks. Study real-world cases of AI protecting businesses in Bahrain.</li>
-    <li><strong>More complex analytical methods:</strong> Employ structural equation modeling to more precisely determine what factors influence attitudes toward AI, increasing mathematical validity.</li>
-    <li><strong>Longitudinal studies:</strong> Conduct surveys over time to track how perceptions change alongside the development of technology.</li>
-    <li><strong>Ethical aspects:</strong> Future investigations need to pay more attention to ethical aspects and potential biases of AI systems in cybersecurity.</li>
-  </ul>
-</section>
-
-<!-- ══════════════════════════ REFERENCES ══════════════════════════ -->
-<section id="references">
-  <div class="section-tag">References</div>
-  <h2>References</h2>
-  <p style="font-size:0.82rem; color:var(--text3); margin-bottom:1.5rem;">Referencing completed using MyBib (<a href="https://www.mybib.com/#/projects/yZ7gVr/citations" class="ref-link">https://www.mybib.com</a>)</p>
-
-  <div class="ref-item">Alevizos, L. and Dekker, M. (2024). Towards an AI-Enhanced Cyber Threat Intelligence Processing Pipeline. <em>Electronics</em>, 13(11), p.2021. doi:<a href="https://doi.org/10.3390/electronics13112021" class="ref-link">https://doi.org/10.3390/electronics13112021</a></div>
-
-  <div class="ref-item">Ahmad, A., Desouza, K.C., Maynard, S.B., Naseer, H. and Baskerville, R.L. (2020). How integration of cyber security management and incident response enables organizational learning. <em>Journal of the Association for Information Science and Technology</em>, 71(8), pp.939–953. doi:<a href="https://doi.org/10.1002/asi.24311" class="ref-link">https://doi.org/10.1002/asi.24311</a></div>
-
-  <div class="ref-item">Apruzzese, G., Laskov, P., de Oca, E.M., Mallouli, W., Rapa, L.B., Grammatopoulos, A.V. and Franco, F.D. (2022). The Role of Machine Learning in Cybersecurity. <em>Digital Threats: Research and Practice</em>, 4(1). doi:<a href="https://doi.org/10.1145/3545574" class="ref-link">https://doi.org/10.1145/3545574</a></div>
-
-  <div class="ref-item">Arif, H., Kumar, A., Fahad, M. and Hussain, H.K. (2023). Future Horizons: AI-Enhanced Threat Detection in Cloud Environments. <em>International Journal of Multidisciplinary Sciences and Arts</em>, 2(2), pp.242–251. doi:<a href="https://doi.org/10.47709/ijmdsa.v2i2.3452" class="ref-link">https://doi.org/10.47709/ijmdsa.v2i2.3452</a></div>
-
-  <div class="ref-item">Buczak, A.L. and Guven, E. (2016). A Survey of Data Mining and Machine Learning Methods for Cyber Security Intrusion Detection. <em>IEEE Communications Surveys &amp; Tutorials</em>, 18(2), pp.1153–1176. doi:<a href="https://doi.org/10.1109/comst.2015.2494502" class="ref-link">https://doi.org/10.1109/comst.2015.2494502</a></div>
-
-  <div class="ref-item">Capuano, N., Fenza, G., Loia, V. and Stanzione, C. (2022). Explainable Artificial Intelligence in Cybersecurity: A Survey. <em>IEEE Access</em>, 10, pp.1–1. doi:<a href="https://doi.org/10.1109/access.2022.3204171" class="ref-link">https://doi.org/10.1109/access.2022.3204171</a></div>
-
-  <div class="ref-item">Cichonski, P., Millar, T., Grance, T., Scarfone, K. and U.S. Department of Commerce (2012). <em>Computer Security Incident Handling Guide</em>. CreateSpace.</div>
-
-  <div class="ref-item">Coakes, S.J. (2005). <em>SPSS version 12.0 for Windows: analysis without anguish</em>. Milton, Qld.: John Wiley &amp; Sons.</div>
-
-  <div class="ref-item">Creswell, J.W. and Creswell, J.D. (2018). <em>Research design: Qualitative, quantitative, and Mixed Methods Approaches</em>. 5th ed. London: SAGE Publications.</div>
-
-  <div class="ref-item">Dhabliya, D., Gujar, S.N., Dhabliya, R., Chavan, G.T., Kalnawat, A. and Bendale, S.P. (2023). Temporal Intelligence in AI-Enhanced Cyber Forensics using Time-Based Analysis for Proactive Threat Detection. <em>Journal of Electrical Systems</em>, 19(3), pp.126–146. doi:<a href="https://doi.org/10.52783/jes.659" class="ref-link">https://doi.org/10.52783/jes.659</a></div>
-
-  <div class="ref-item">Guidotti, R. (2018). A Survey of Methods for Explaining Black Box Models. <em>ACM Computing Surveys</em>, 51(5), pp.1–42. doi:<a href="https://doi.org/10.1145/3236009" class="ref-link">https://doi.org/10.1145/3236009</a></div>
-
-  <div class="ref-item">Hair, J.F., Risher, J., Sarstedt, M. and Ringle, C.M. (2019). When to use and how to report the results of PLS-SEM. <em>European Business Review</em>, 31(1), pp.2–24. Available at: <a href="https://www.researchgate.net/publication/329443894_When_to_use_and_how_to_report_the_results_of_PLS-SEM" class="ref-link">ResearchGate link</a></div>
-
-  <div class="ref-item">Kreinbrink, L.J. (2019). Analysis of Artificial Intelligence (AI) Enhanced Technologies in Support of Cyber Defense: Advantages, Challenges, and Considerations for Future Deployment. ProQuest. Available at: <a href="https://www.proquest.com/openview/2ca10115b5be484fc619b2534e01ace0/1?pq-origsite=gscholar&cbl=18750&diss=y" class="ref-link">ProQuest link</a></div>
-
-  <div class="ref-item">Mahajan, S., Khurana, M. and Vieira Estrela, V. (2024). <em>Applying Artificial Intelligence in Cybersecurity Analytics and Cyber Threat Detection</em>. John Wiley &amp; Sons.</div>
-
-  <div class="ref-item">Nallapareddy, V.S.S.R. and Katta, S.K.R. (2025). AI-Enhanced Cyber Security Proactive Threat Detection and Response Systems. <em>2025 4th International Conference on Sentiment Analysis and Deep Learning (ICSADL)</em>, pp.1510–1514. doi:<a href="https://doi.org/10.1109/icsadl65848.2025.10933436" class="ref-link">https://doi.org/10.1109/icsadl65848.2025.10933436</a></div>
-
-  <div class="ref-item">NIST (2023). AI Risk Management Framework. <em>Artificial Intelligence Risk Management Framework (AI RMF 1.0)</em>. doi:<a href="https://doi.org/10.6028/nist.ai.100-1" class="ref-link">https://doi.org/10.6028/nist.ai.100-1</a></div>
-
-  <div class="ref-item">Russell, S. and Norvig, P. (2021). <em>Artificial Intelligence: A Modern Approach</em>. Fourth Edition, Global Edition. Available at: <a href="http://lib.ysu.am/disciplines_bk/efdd4d1d4c2087fe1cbe03d9ced67f34.pdf" class="ref-link">link</a></div>
-
-  <div class="ref-item">Saunders, M.N., Lewis, P. and Thornhill, A. (2023). <em>Research Methods for Business Students</em>. Available at: <a href="https://www.researchgate.net/publication/240218229_Research_Methods_for_Business_Students" class="ref-link">ResearchGate link</a></div>
-
-  <div class="ref-item">Schmitt, M. (2023). Securing the Digital World: Protecting smart infrastructures and digital industries with Artificial Intelligence (AI)-enabled malware and intrusion detection. <em>Journal of Industrial Information Integration</em>, 36, p.100520. doi:<a href="https://doi.org/10.1016/j.jii.2023.100520" class="ref-link">https://doi.org/10.1016/j.jii.2023.100520</a></div>
-
-  <div class="ref-item">Shone, N., Ngoc, T.N., Phai, V.D. and Shi, Q. (2018). A Deep Learning Approach to Network Intrusion Detection. <em>IEEE Transactions on Emerging Topics in Computational Intelligence</em>, 2(1), pp.41–50. doi:<a href="https://doi.org/10.1109/tetci.2017.2772792" class="ref-link">https://doi.org/10.1109/tetci.2017.2772792</a></div>
-
-  <div class="ref-item">Tang, T.A., Mhamdi, L., McLernon, D., Zaidi, S.A.R., Ghogho, M. and El Moussa, F. (2020). DeepIDS: Deep Learning Approach for Intrusion Detection in Software Defined Networking. <em>Electronics</em>, 9(9), p.1533. doi:<a href="https://doi.org/10.3390/electronics9091533" class="ref-link">https://doi.org/10.3390/electronics9091533</a></div>
-
-  <div class="ref-item">Venkatesh, V., Thong, J. and Xu, X. (2016). Unified Theory of Acceptance and Use of Technology: A Synthesis and the Road Ahead. <em>Journal of the Association for Information Systems</em>, 17(5), pp.328–376. doi:<a href="https://doi.org/10.17705/1jais.00428" class="ref-link">https://doi.org/10.17705/1jais.00428</a></div>
-</section>
-
-<!-- ══════════════════════════ APPENDIX ══════════════════════════ -->
-<section id="appendix">
-  <div class="section-tag">Appendix</div>
-  <h2>Appendix A &amp; B: Research Questionnaire</h2>
-  <p>The following is the complete survey instrument used in this research, covering all four sections of the questionnaire.</p>
-
-  <div class="callout">
-    <p><strong>Survey on AI in Cybersecurity: Enhancing Threat Detection and Response</strong><br>
-    This survey is conducted as part of a senior research project examining the integration of Artificial Intelligence (AI) in cybersecurity. The purpose is to explore how AI-based technologies enhance threat detection, incident response, and overall cybersecurity effectiveness within organizations.</p>
-    <p style="margin-top:8px;"><strong>Prepared by:</strong> Maryam Abdulla (202100437) &amp; Emaan Rashid Latif (202109038) &nbsp;|&nbsp; <strong>Supervised by:</strong> Dr. Ali Zolait</p>
-  </div>
-
-  <h3>Section A: Basic Information of Participants</h3>
-
-  <div class="qsection">
-    <h4>Demographic Questions</h4>
-    <div class="q-item"><span class="q-id">Q1</span><span><strong>Gender</strong> — Male / Female</span></div>
-    <div class="q-item"><span class="q-id">Q2</span><span><strong>What is your age?</strong> — Under 18 / 18–20 / 20–25 / 26 and above</span></div>
-    <div class="q-item"><span class="q-id">Q3</span><span><strong>What type of degree are you currently studying?</strong> — Associate Diploma / Bachelor's Degree / Master's Degree / PhD / Other</span></div>
-    <div class="q-item"><span class="q-id">Q4</span><span><strong>What is your field of study?</strong> — Information Technology / Engineering / Business / Science / Other</span></div>
-  </div>
-
-  <h3>Section B: General Awareness of AI &amp; Cybersecurity</h3>
-  <p>Instructions: Please indicate your level of agreement for each statement below.</p>
-  <div class="scale-pills">
-    <span class="scale-pill">1 – Strongly Disagree</span>
-    <span class="scale-pill">2 – Disagree</span>
-    <span class="scale-pill">3 – Neutral</span>
-    <span class="scale-pill">4 – Agree</span>
-    <span class="scale-pill">5 – Strongly Agree</span>
-  </div>
-
-  <div class="qsection">
-    <h4>1. General Awareness of Artificial Intelligence (AI)</h4>
-    <div class="q-item"><span class="q-id">A</span><span>I believe I know what Artificial Intelligence (AI) is</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe I know that AI is used in cybersecurity</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe I understand that AI can help detect online threats</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe AI technologies are becoming increasingly important in cybersecurity practices</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>2. General Awareness of Cybersecurity</h4>
-    <div class="q-item"><span class="q-id">A</span><span>I believe I know what Cybersecurity means</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe I am aware of common cybersecurity threats (e.g., phishing, malware, hacking)</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe I take steps to protect my personal information online</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe I am aware of cybersecurity policies in my organization or school</span></div>
-  </div>
-
-  <h3>Section C: AI in Cybersecurity — Research Constructs</h3>
-  <p>This section examines the role of AI in cybersecurity, including its ability to detect and respond to threats, the technical features of AI systems, the knowledge and skills needed to use them effectively, their practical usefulness, and their ease of use.</p>
-
-  <div class="qsection">
-    <h4>1. AI-based Threat Detection Capability</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section explores how AI helps identify cyber threats faster than traditional methods, detect unusual activities, and recognize new or unseen threats, improving overall detection accuracy.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI can help to find cyber threats faster than traditional methods</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI can notice unusual online activities quickly</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe AI can help to detect new cyber threats that were not seen before</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe AI improves the accuracy of detecting cyber threats</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>2. AI-based Incident Response Capabilities</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section examines AI's role in helping organizations respond quickly to cyber attacks, minimize damage, simplify incident handling, and enable automated actions during incidents.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI can help an organization's systems respond faster to any cyber attack incidents</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI-based incident response can reduce the damage caused by cyber attacks</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe using AI makes handling cybersecurity incidents easier</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe AI helps organizations take automated actions during cyber incidents</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>3. Technical Feature of AI Systems</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section looks at the technical performance of AI systems, including their accuracy, reliability, ability to handle large data, and adaptability to evolving cybersecurity threats.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI systems are accurate and effective in addressing cybersecurity threats</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI systems are reliable, that make cybersecurity better</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe AI systems can process large amounts of data and it works well</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe AI systems can adapt to new cybersecurity threats over time</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>4. Knowledge and Skills</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section focuses on the role of human expertise, assessing whether organizations provide adequate training and whether technical knowledge influences the effectiveness of AI in cybersecurity.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe organizations have trained people who use AI in cybersecurity properly</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe technical knowledge of AI capabilities can increase the benefits of using AI</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe organizations provide sufficient training for employees to use AI in cybersecurity</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe lack of technical expertise can limit the effectiveness of AI in cybersecurity</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>5. Usefulness of AI</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section evaluates the practical benefits of AI, including improving security decisions, adding value to cybersecurity tasks, and enhancing overall organizational cybersecurity performance.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI is useful for improving cybersecurity in the organization</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI helps to make better security decisions</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe AI adds value to cybersecurity tasks that are achieved in the organization</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe using AI improves the overall performance of cybersecurity operations</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>6. Ease of Use</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section measures how easy it is to learn, use, and integrate AI cybersecurity tools, and whether users feel comfortable with these systems.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI cybersecurity tools are easy to use</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe learning to use AI tools for cybersecurity is simple</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe using AI-based tools is more comfortable</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe it is easy to integrate AI tools into existing cybersecurity systems</span></div>
-  </div>
-
-  <div class="qsection">
-    <h4>7. Effectiveness of Cybersecurity Threat Detection and Response</h4>
-    <p style="font-size:0.82rem; color:var(--text3); margin-bottom:8px;">This section assesses AI's impact on cybersecurity performance, including faster threat detection, fewer false alarms, improved prevention, and overall enhancement of organizational security.</p>
-    <div class="q-item"><span class="q-id">A</span><span>I believe AI improves the speed of detecting cybersecurity threats</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI reduces the number of false alarms in cybersecurity systems</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe AI improves the organization's ability to prevent cyber attacks</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I believe AI enhances overall cybersecurity performance in the organization</span></div>
-  </div>
-
-  <h3>Section D: Overall Opinion</h3>
-  <p>This section gathers participants' general attitudes toward AI in cybersecurity, including support for its use, its future importance, and willingness to adopt or recommend AI tools.</p>
-
-  <div class="qsection">
-    <h4>1. Overall Opinion</h4>
-    <div class="q-item"><span class="q-id">A</span><span>I support the use of AI in cybersecurity</span></div>
-    <div class="q-item"><span class="q-id">B</span><span>I believe AI will be important for the future of cybersecurity</span></div>
-    <div class="q-item"><span class="q-id">C</span><span>I believe organizations should invest more in AI technologies for cybersecurity</span></div>
-    <div class="q-item"><span class="q-id">D</span><span>I would recommend the adoption of AI tools for cybersecurity purposes</span></div>
-  </div>
-</section>
-
-</div><!-- end .container -->
-
-<!-- ══════════════════════════ FOOTER ══════════════════════════ -->
-<footer>
-  <p>AI in Cybersecurity: Enhancing Threat Detection and Response</p>
-  <p>Maryam Abdulla (202100437) &nbsp;·&nbsp; Emaan Rashid Latif (202109038)</p>
-  <p style="margin-top:8px;">University of Bahrain &nbsp;·&nbsp; College of Information Technology &nbsp;·&nbsp; Department of Information Systems</p>
-  <p>ITIS 499 Senior Project &nbsp;·&nbsp; Supervisor: Dr. Ali Zolait &nbsp;·&nbsp; Submitted May 12th, 2026</p>
-</footer>
+    setInterval(draw, 30);
+</script>
 
 </body>
 </html>
